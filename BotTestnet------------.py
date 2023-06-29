@@ -31,7 +31,7 @@ from keras.models import Sequential
 from keras.layers import LSTM, Dense
 from keras.regularizers import l2
 from keras.optimizers import Adam
-
+from dotenv import load_dotenv, find_dotenv
 import numpy as np
 from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
 from sklearn.preprocessing import MinMaxScaler
@@ -43,7 +43,9 @@ import pandas as pd
 
 
 def load_binance_api_keys():
-    load_dotenv("C:\Users\hp\Desktop\CODE\BOT CRYPTO\A)   le BOT\les bots qui fonctionne\APIsKeyAndEmail.env")
+    dotenv_path = os.path.join(os.path.dirname(__file__), 'APIsKeyAndEmail.env')
+    load_dotenv(dotenv_path)
+
     api_key = os.environ.get("KEY")
     api_secret = os.environ.get("SECRET")
 
@@ -65,8 +67,7 @@ def fetch_data(binance):
     data['price_change'] = data['close'].astype(float) - data['open'].astype(float)
     data = data[['timestamp', 'close', 'volume', 'price_change']]
     
-    # Supprimer les valeurs incohérentes
-    data = data.dropna()  # Supprimer les lignes contenant des valeurs nulles
+    data = data.dropna() 
     data['volume'] = pd.to_numeric(data['volume'], errors='coerce')
     data['close'] = pd.to_numeric(data['volume'], errors='coerce')
     data = data[data['volume'] > 0]
@@ -236,7 +237,7 @@ def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, 
         elif position > 0 and (y_test[i] <= entry_price * (1 - stop_loss) or y_test[i] >= entry_price * (1 + take_profit)):
             position -= 1
             exit_price = y_test[i]
-            trade_result = calculate_return(entry_price, exit_price, 1)  # Calculer le résultat du trade
+            trade_result = calculate_return(entry_price, exit_price, 1)  # Calculate the trade result
             result_string = "stop_loss" if y_test[i] <= entry_price * (1 - stop_loss) else "take_profit"
             balance += exit_price
             trade_data.append(("sell", i, exit_price, result_string))
@@ -253,7 +254,7 @@ def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, 
         trade_result = calculate_return(entry_price, y_test[-1], 1)
         trade_results.append((entry_price, y_test[-1], trade_result))
 
-    # Afficher le résultat de chaque trade
+
     for i, result in enumerate(trade_results):
         print(f"Trade {i+1}: Entrée à {result[0]}, sortie à {result[1]}, résultat de {result[2]:.2%}")
 
@@ -292,7 +293,7 @@ def send_email(subject, body, mse, corr, best_hyperparams, to_email, from_email,
         server.quit()
         return True
     except Exception as e:
-        print("Erreur lors de l'envoi de l'e-mail :", e)
+        print("Error sending the e-mail :", e)
         return False
 
 def main():
@@ -333,10 +334,17 @@ def main():
         plt.legend()
 
         now2 = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        filename = "C:/Users/hp/Desktop/CODE/BOT CRYPTO/graphique de resultat/graph resultat pred  {}.png".format(now2)
-        plt.savefig(filename)
-
-        np.savetxt("predictions.csv", y_pred, delimiter=",")
+    
+        # Créer le répertoire "ResultGraph" s'il n'existe pas déjà
+        graph_dir = "ResultGraph"
+        os.makedirs(graph_dir, exist_ok=True)
+    
+        # Construire le chemin relatif pour enregistrer le graphique
+        graph_filename = "result_graph_pred_{}.png".format(now2)
+        graph_filepath = os.path.join(graph_dir, graph_filename)
+    
+        # Enregistrer le graphique
+        plt.savefig(graph_filepath)
 
 # Recherche des meilleurs paramètres de trading
         trading_param_space = {
@@ -346,23 +354,22 @@ def main():
         symbol='ETHUSDT'
         trading_trials = Trials()
         trading_best = fmin(lambda p: trading_objective(p, y_test, y_pred, binance, symbol), trading_param_space, algo=tpe.suggest, max_evals=200, trials=trading_trials, verbose=1)
-        print("Meilleurs paramètres de trading : ", trading_best)
+        print("Best trading parameters : ", trading_best)
 
         solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
 
-        subject = "Rapport de performance du modèle"
-        body = "Solde Final: {:.2f}".format(solde_final)
+        subject = "Model performance report"
+        body = "Final balance: {:.2f}".format(solde_final)
         to_email = os.environ.get("TOEMAIL")
         from_email = os.environ.get("FROMEMAIL")
         password = os.environ.get("EMAILPASSWORD") 
         if send_email(subject, body, mse, corr, best, to_email, from_email, password):
-            print("E-mail envoyé avec succès")
+            print("E-mail sent with success")
         else:
-            print("Échec de l'envoi de l'e-mail")
+            print("E-mail failed to be sent")
 
-        answer = input("Voulez-vous relancer le programme ? (y/n) ")
+        answer = input("Do you want to restart the program ? (y/n) ")
         if answer.lower() != "y":
             break
 if __name__ == '__main__':
     main()
-    
