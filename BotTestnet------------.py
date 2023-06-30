@@ -54,6 +54,7 @@ def load_binance_api_keys():
 
     return api_key, api_secret
 
+
 def initialize_binance(api_key, api_secret):
     binance = Client(api_key, api_secret, testnet=True)
     return binance
@@ -222,7 +223,7 @@ def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, 
             balance -= entry_price
             trade_data.append(("buy", i, entry_price, "buy"))
             if place_order(binance, symbol, Client.SIDE_BUY, quantity):
-                print(f"Achat au prix {entry_price}")
+                print(f"Buying at price {entry_price}")
             trade_count += 1
 
         elif signal == -1 and position > 0:
@@ -231,7 +232,7 @@ def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, 
             balance += exit_price
             trade_data.append(("sell", i, exit_price, "sell"))
             if place_order(binance, symbol, Client.SIDE_SELL, quantity):
-                print(f"Vente au prix {exit_price}")
+                print(f"Selling at price {exit_price}")
             trade_count += 1
 
         elif position > 0 and (y_test[i] <= entry_price * (1 - stop_loss) or y_test[i] >= entry_price * (1 + take_profit)):
@@ -243,7 +244,7 @@ def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, 
             trade_data.append(("sell", i, exit_price, result_string))
             trade_results.append((entry_price, exit_price, trade_result))
             if place_order(binance, symbol, Client.SIDE_SELL, quantity):
-                print(f"Vente au prix {exit_price} ({result_string})")
+                print(f"Selling at price {exit_price} ({result_string})")
             trade_count += 1
 
         i += 1
@@ -256,9 +257,9 @@ def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, 
 
 
     for i, result in enumerate(trade_results):
-        print(f"Trade {i+1}: Entrée à {result[0]}, sortie à {result[1]}, résultat de {result[2]:.2%}")
+        print(f"Trade {i+1}: Entry at {result[0]}, Exit at {result[1]}, Result of {result[2]:.2%}")
 
-    print(f"Solde final: {balance}")
+    print(f"Final balance: {balance}")
     return balance
 
 
@@ -373,3 +374,4 @@ def main():
             break
 if __name__ == '__main__':
     main()
+    
