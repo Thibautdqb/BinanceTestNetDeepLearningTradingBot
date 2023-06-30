@@ -58,4 +58,4 @@ pip install python-binance
 
 - Synchronize your computer's time automatically to avoid any problems.
 
-- Run the bot code and check that it works correctly.
+- Run the bot code as an administator and check that it works correctly.
