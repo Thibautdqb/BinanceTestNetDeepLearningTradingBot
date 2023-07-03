@@ -298,82 +298,101 @@ def send_email(subject, body, mse, corr, best_hyperparams, to_email, from_email,
         print("Error sending the e-mail :", e)
         return False
 
+
+button_clicked = st.button("Demarrez le programme")
+
+
+if button_clicked:
+    # Votre code ici
+    # Il sera exécuté uniquement lorsque le bouton est cliqué
+    st.write("Le bouton a été cliqué !")
 def main():
     while True:
         st.title("Deep learning Tradingbot")
         api_key, api_secret = load_binance_api_keys()
+
         binance = initialize_binance(api_key, api_secret)
-        train, val, test = fetch_data(binance)
-        X_train, y_train, X_val, y_val, X_test, y_test = load_csv_data()
-        X_train, X_val, X_test = reshape_data(X_train, X_val, X_test)
-        optimizer_choices = ['adam']
-        param_space = {
-            'learning_rate': hp.uniform('learning_rate', 0.0001, 0.01),   ### editable parameters
-            'batch_size': hp.quniform('batch_size', 32, 512, 32),         ### editable parameters
-            'epochs': hp.quniform('epochs', 10, 100, 10),                 ### editable parameters
-            'l2': hp.loguniform('l2', -10, -4),                           ### editable parameters
-            'optimizer': hp.choice('optimizer', optimizer_choices),       ### editable parameters
-            'units': hp.quniform('units', 32, 512, 32),                   ### editable parameters
-            'unit': hp.quniform('unit', 32, 512, 32),                     ### editable parameters
-            'dropout': hp.uniform('dropout', 0, 0.5)}                     ### editable parameters
+        if st.button("Charger les données et effectuer l'analyse"):
+            train, val, test = fetch_data(binance)
+            st.subheader("Ensemble de formation")
+            st.write(train)
     
-        trials = Trials()
-        best = fmin(lambda p: objective(p, X_train, y_train, X_val, y_val), param_space, algo=tpe.suggest, max_evals=10, trials=trials)
-        best['optimizer'] = optimizer_choices[best['optimizer']]
-        print("Best hyperparameters:", best)
-
-        model = create_model(best)
-        history = model.fit(X_train, y_train, batch_size=int(best['batch_size']), epochs=int(best['epochs']), validation_data=(X_val, y_val))
-
-        y_pred = model.predict(X_test)
-        corr = np.corrcoef(y_test, y_pred.flatten())[0][1]
-        print("Final model correlation: ", corr)
-
-        mse = mean_squared_error(y_test, y_pred)
-        print("Mean squared error:", mse)
-
-        plt.plot(y_test, label='Données de test')
-        plt.plot(y_pred, label='Prédictions')
-        plt.legend()
-
-        now2 = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            st.subheader("Ensemble de validation")
+            st.write(val)
     
-        # Créer le répertoire "ResultGraph" s'il n'existe pas déjà
-        graph_dir = "ResultGraph"
-        os.makedirs(graph_dir, exist_ok=True)
-    
-        # Construire le chemin relatif pour enregistrer le graphique
-        graph_filename = "result_graph_pred_{}.png".format(now2)
-        graph_filepath = os.path.join(graph_dir, graph_filename)
-    
-        # Enregistrer le graphique
-        plt.savefig(graph_filepath)
+            st.subheader("Ensemble de test")
+            st.write(test)
+            X_train, y_train, X_val, y_val, X_test, y_test = load_csv_data()
+            X_train, X_val, X_test = reshape_data(X_train, X_val, X_test)
 
-# Recherche des meilleurs paramètres de trading
-        trading_param_space = {
-            'threshold': hp.uniform('threshold', 0, 0.05),          ### editable parameters
-            'stop_loss': hp.uniform('stop_loss', 0, 0.01),          ### editable parameters
-            'take_profit': hp.uniform('take_profit', 0, 0.01)}      ### editable parameters
-        symbol='ETHUSDT'
-        trading_trials = Trials()
-        trading_best = fmin(lambda p: trading_objective(p, y_test, y_pred, binance, symbol), trading_param_space, algo=tpe.suggest, max_evals=200, trials=trading_trials, verbose=1)
-        print("Best trading parameters : ", trading_best)
+            optimizer_choices = ['adam']
+            param_space = {
+                'learning_rate': hp.uniform('learning_rate', 0.0001, 0.01),   ### editable parameters
+                'batch_size': hp.quniform('batch_size', 32, 512, 32),         ### editable parameters
+                'epochs': hp.quniform('epochs', 10, 100, 10),                 ### editable parameters
+                'l2': hp.loguniform('l2', -10, -4),                           ### editable parameters
+                'optimizer': hp.choice('optimizer', optimizer_choices),       ### editable parameters
+                'units': hp.quniform('units', 32, 512, 32),                   ### editable parameters
+                'unit': hp.quniform('unit', 32, 512, 32),                     ### editable parameters
+                'dropout': hp.uniform('dropout', 0, 0.5)}                     ### editable parameters
 
-        solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
+            trials = Trials()
+            best = fmin(lambda p: objective(p, X_train, y_train, X_val, y_val), param_space, algo=tpe.suggest, max_evals=10, trials=trials)
+            best['optimizer'] = optimizer_choices[best['optimizer']]
+            print("Best hyperparameters:", best)
 
-        subject = "Model performance report"
-        body = "Final balance: {:.2f}".format(solde_final)
-        to_email = os.environ.get("TOEMAIL")
-        from_email = os.environ.get("FROMEMAIL")
-        password = os.environ.get("EMAILPASSWORD") 
-        if send_email(subject, body, mse, corr, best, to_email, from_email, password):
-            print("E-mail sent with success")
-        else:
-            print("E-mail failed to be sent")
+            model = create_model(best)
+            history = model.fit(X_train, y_train, batch_size=int(best['batch_size']), epochs=int(best['epochs']), validation_data=(X_val, y_val))
 
-        answer = input("Do you want to restart the program ? (y/n) ")
-        if answer.lower() != "y":
-            break
+            y_pred = model.predict(X_test)
+            corr = np.corrcoef(y_test, y_pred.flatten())[0][1]
+            print("Final model correlation: ", corr)
+
+            mse = mean_squared_error(y_test, y_pred)
+            print("Mean squared error:", mse)
+
+            plt.plot(y_test, label='Données de test')
+            plt.plot(y_pred, label='Prédictions')
+            plt.legend()
+
+            now2 = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+            # Créer le répertoire "ResultGraph" s'il n'existe pas déjà
+            graph_dir = "ResultGraph"
+            os.makedirs(graph_dir, exist_ok=True)
+
+            # Construire le chemin relatif pour enregistrer le graphique
+            graph_filename = "result_graph_pred_{}.png".format(now2)
+            graph_filepath = os.path.join(graph_dir, graph_filename)
+
+            # Enregistrer le graphique
+            plt.savefig(graph_filepath)
+
+# Recher    che des meilleurs paramètres de trading
+            trading_param_space = {
+                'threshold': hp.uniform('threshold', 0, 0.05),          ### editable parameters
+                'stop_loss': hp.uniform('stop_loss', 0, 0.01),          ### editable parameters
+                'take_profit': hp.uniform('take_profit', 0, 0.01)}      ### editable parameters
+            symbol='ETHUSDT'
+            trading_trials = Trials()
+            trading_best = fmin(lambda p: trading_objective(p, y_test, y_pred, binance, symbol), trading_param_space, algo=tpe.suggest, max_evals=200, trials=trading_trials, verbose=1)
+            print("Best trading parameters : ", trading_best)
+
+            solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
+
+            subject = "Model performance report"
+            body = "Final balance: {:.2f}".format(solde_final)
+            to_email = os.environ.get("TOEMAIL")
+            from_email = os.environ.get("FROMEMAIL")
+            password = os.environ.get("EMAILPASSWORD") 
+            if send_email(subject, body, mse, corr, best, to_email, from_email, password):
+                print("E-mail sent with success")
+            else:
+                print("E-mail failed to be sent")
+
+            answer = input("Do you want to restart the program ? (y/n) ")
+            if answer.lower() != "y":
+                break
 if __name__ == '__main__':
     main()
     
