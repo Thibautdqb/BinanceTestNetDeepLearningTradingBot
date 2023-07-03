@@ -1,3 +1,4 @@
+import streamlit as st
 import ccxt
 import time
 import datetime
@@ -209,7 +210,7 @@ def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, 
     entry_price = 0
     trade_data = []
     trade_results = []  
-    quantity = 0.1  ### Quantity of asset to be exchanged (customise to suit your needs)
+    quantity = st.slider("Percentage of the total balance to be exchanged", 0.1, 0.2, 0.3)  ### Percentage of the total balance to be exchanged (customise to suit your needs)
 
     trade_count = 0  
     i = 0  
@@ -299,6 +300,7 @@ def send_email(subject, body, mse, corr, best_hyperparams, to_email, from_email,
 
 def main():
     while True:
+        st.title("Deep learning Tradingbot", size=2, weight='bold')
         api_key, api_secret = load_binance_api_keys()
         binance = initialize_binance(api_key, api_secret)
         train, val, test = fetch_data(binance)
