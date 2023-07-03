@@ -302,24 +302,22 @@ def send_email(subject, body, mse, corr, best_hyperparams, to_email, from_email,
 button_clicked = st.button("Demarrez le programme")
 
 
-if button_clicked:
-    # Votre code ici
-    # Il sera exécuté uniquement lorsque le bouton est cliqué
-    st.write("Le bouton a été cliqué !")
+
 def main():
     while True:
         st.title("Deep learning Tradingbot")
         api_key, api_secret = load_binance_api_keys()
-
         binance = initialize_binance(api_key, api_secret)
-        if st.button("Charger les données et effectuer l'analyse"):
+        button_clicked = st.button("Demarrez le programme")
+        if button_clicked: 
+            st.write("Le bouton a été cliqué !")
             train, val, test = fetch_data(binance)
             st.subheader("Ensemble de formation")
             st.write(train)
-    
+
             st.subheader("Ensemble de validation")
             st.write(val)
-    
+
             st.subheader("Ensemble de test")
             st.write(test)
             X_train, y_train, X_val, y_val, X_test, y_test = load_csv_data()
