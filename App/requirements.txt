@@ -1,0 +1,10 @@
+pip install streamlit
+pip install ccxt
+pip install pandas
+pip install numpy
+pip install scikit-learn
+pip install tensorflow
+pip install matplotlib
+pip install hyperopt
+pip install python-dotenv
+pip install python-binance
