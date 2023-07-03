@@ -299,9 +299,6 @@ def send_email(subject, body, mse, corr, best_hyperparams, to_email, from_email,
         return False
 
 
-button_clicked = st.button("Demarrez le programme")
-
-
 
 def main():
     while True:
