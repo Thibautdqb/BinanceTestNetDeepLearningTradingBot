@@ -305,7 +305,7 @@ def main():
         st.title("Deep learning Tradingbot")
         api_key, api_secret = load_binance_api_keys()
         binance = initialize_binance(api_key, api_secret)
-        button_clicked = st.button("Demarrez le programme")
+        button_clicked = st.checkbox("Demarrez le programme")
         if button_clicked: 
             st.write("Le bouton a été cliqué !")
             train, val, test = fetch_data(binance)
