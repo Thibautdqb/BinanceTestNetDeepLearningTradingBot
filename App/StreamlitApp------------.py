@@ -300,7 +300,7 @@ def send_email(subject, body, mse, corr, best_hyperparams, to_email, from_email,
 
 def main():
     while True:
-        st.title("Deep learning Tradingbot", size=2, weight='bold')
+        st.title("Deep learning Tradingbot")
         api_key, api_secret = load_binance_api_keys()
         binance = initialize_binance(api_key, api_secret)
         train, val, test = fetch_data(binance)
