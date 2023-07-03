@@ -1,0 +1,10 @@
+streamlit
+ccxt
+pandas
+numpy
+scikit-learn
+tensorflow
+matplotlib
+hyperopt
+python-dotenv
+python-binance
