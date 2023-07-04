@@ -300,14 +300,14 @@ def send_email(subject, body, mse, corr, best_hyperparams, to_email, from_email,
 
 
 
-def main():
+def main(key1):
     while True:
         st.title("Deep learning Tradingbot")
         api_key, api_secret = load_binance_api_keys()
         binance = initialize_binance(api_key, api_secret)
 
 
-        button_clicked = st.checkbox("Demarrez le programme")
+        button_clicked = st.checkbox("Demarrez le programme",key={key1})
         if button_clicked: 
             st.write("Le bouton a été cliqué !")
             train, val, test = fetch_data(binance)
@@ -376,7 +376,7 @@ def main():
                 print("E-mail failed to be sent")
         else: 
             st.write("La case n'est pas cochée. Veuillez la cocher avant de continuer.")
-            
+
 if __name__ == '__main__':
     main()
     
