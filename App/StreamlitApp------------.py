@@ -305,6 +305,8 @@ def main():
         st.title("Deep learning Tradingbot")
         api_key, api_secret = load_binance_api_keys()
         binance = initialize_binance(api_key, api_secret)
+
+
         button_clicked = st.checkbox("Demarrez le programme")
         if button_clicked: 
             st.write("Le bouton a été cliqué !")
@@ -350,18 +352,6 @@ def main():
             plt.plot(y_pred, label='Prédictions')
             plt.legend()
 
-            now2 = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-
-            # Créer le répertoire "ResultGraph" s'il n'existe pas déjà
-            graph_dir = "ResultGraph"
-            os.makedirs(graph_dir, exist_ok=True)
-
-            # Construire le chemin relatif pour enregistrer le graphique
-            graph_filename = "result_graph_pred_{}.png".format(now2)
-            graph_filepath = os.path.join(graph_dir, graph_filename)
-
-            # Enregistrer le graphique
-            plt.savefig(graph_filepath)
 
 # Recher    che des meilleurs paramètres de trading
             trading_param_space = {
@@ -384,10 +374,9 @@ def main():
                 print("E-mail sent with success")
             else:
                 print("E-mail failed to be sent")
-
-            answer = input("Do you want to restart the program ? (y/n) ")
-            if answer.lower() != "y":
-                break
+        else: 
+            st.write("La case n'est pas cochée. Veuillez la cocher avant de continuer.")
+            
 if __name__ == '__main__':
     main()
     
