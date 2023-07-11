@@ -332,6 +332,7 @@ def main():
             st.write(new_valeur_min_learning_rate)
             st.write(new_valeur_max_learning_rate)
 
+        st.markdown("<style>div[role='column']:nth-child(2) {margin-left: 20px;}</style>", unsafe_allow_html=True)
 
 
         with col_slider_2 : 
