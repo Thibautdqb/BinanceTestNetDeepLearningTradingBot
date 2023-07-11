@@ -304,6 +304,7 @@ def send_email(subject, body, mse, corr, best_hyperparams, to_email, from_email,
 def main():
     while True:
         import streamlit as st
+        from streamlit import slider, selectbox
 
         st.title("Deep learning Tradingbot")
 
@@ -322,29 +323,44 @@ def main():
 
             with col1:
                 with st.expander("Ensemble de formation"):
-                    st.write(train.style.set_properties(**{'background-color': 'lightblue', 'color': 'black'}))
+                    st.dataframe(train.style.set_properties(**{'background-color': 'lightblue', 'color': 'black'}))
 
             with col2:
                 with st.expander("Ensemble de validation"):
-                    st.write(val.style.set_properties(**{'background-color': 'lightgreen', 'color': 'black'}))
+                    st.dataframe(val.style.set_properties(**{'background-color': 'lightgreen', 'color': 'black'}))
 
             with col3:
                 with st.expander("Ensemble de test"):
-                    st.write(test.style.set_properties(**{'background-color': 'lightyellow', 'color': 'black'}))
+                    st.dataframe(test.style.set_properties(**{'background-color': 'lightyellow', 'color': 'black'}))
 
 
             X_train, y_train, X_val, y_val, X_test, y_test = load_csv_data()
             X_train, X_val, X_test = reshape_data(X_train, X_val, X_test)
             optimizer_choices = ['adam']
+
+
+            # Paramètres éditables
+            learning_rate = st.slider('Learning Rate', 0.0001, 0.01, step=0.0001, value=0.001)
+            batch_size = st.slider('Batch Size', 32, 512, step=32, value=128)
+            epochs = st.slider('Epochs', 10, 100, step=10, value=50)
+            l2 = st.slider('L2', -10, -4, step=0.1, value=-6)
+            optimizer = st.selectbox('Optimizer', 'adam', 'SGD')
+            units = st.slider('Units', 32, 512, step=32, value=256)
+            unit = st.slider('Unit', 32, 512, step=32, value=128)
+            dropout = st.slider('Dropout', 0.0, 0.5, step=0.1, value=0.2)
+
+            # Créer le dictionnaire des paramètres
             param_space = {
-                'learning_rate': hp.uniform('learning_rate', 0.0001, 0.01),   ### editable parameters
-                'batch_size': hp.quniform('batch_size', 32, 512, 32),         ### editable parameters
-                'epochs': hp.quniform('epochs', 10, 100, 10),                 ### editable parameters
-                'l2': hp.loguniform('l2', -10, -4),                           ### editable parameters
-                'optimizer': hp.choice('optimizer', optimizer_choices),       ### editable parameters
-                'units': hp.quniform('units', 32, 512, 32),                   ### editable parameters
-                'unit': hp.quniform('unit', 32, 512, 32),                     ### editable parameters
-                'dropout': hp.uniform('dropout', 0, 0.5)}                     ### editable parameters
+                'learning_rate': learning_rate,
+                'batch_size': batch_size,
+                'epochs': epochs,
+                'l2': l2,
+                'optimizer': optimizer,
+                'units': units,
+                'unit': unit,
+                'dropout': dropout
+            }
+
             trials = Trials()
             best = fmin(lambda p: objective(p, X_train, y_train, X_val, y_val), param_space, algo=tpe.suggest, max_evals=10, trials=trials)
             best['optimizer'] = optimizer_choices[best['optimizer']]
