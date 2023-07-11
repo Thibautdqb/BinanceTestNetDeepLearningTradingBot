@@ -310,6 +310,17 @@ def main():
 
         api_key, api_secret = load_binance_api_keys()
         binance = initialize_binance(api_key, api_secret)
+
+
+        # Paramètres éditables
+        learning_rate = st.slider('Learning Rate', 0.0001, 0.01, step=0.0001, value=0.001)
+        batch_size = st.slider('Batch Size', 32, 512, step=32, value=128)
+        epochs = st.slider('Epochs', 10, 100, step=10, value=50)
+        l2 = st.slider('L2', -10, -4, step=0.1, value=-6)
+        optimizer = st.selectbox('Optimizer', 'adam', 'SGD')
+        units = st.slider('Units', 32, 512, step=32, value=256)
+        unit = st.slider('Unit', 32, 512, step=32, value=128)
+        dropout = st.slider('Dropout', 0.0, 0.5, step=0.1, value=0.2)
         result = st.button ('Start Magic')
         st.write(result)
         if result :
