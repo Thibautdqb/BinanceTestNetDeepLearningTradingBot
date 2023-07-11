@@ -42,18 +42,15 @@ import pandas as pd
 
 
 
+
 def load_binance_api_keys():
-
-        #dotenv_path = os.path.join(os.path.dirname(__file__), 'APIsKeyAndEmail.env')
-        #load_dotenv(dotenv_path)
-
-        api_key = ("QrRxR5wAtOzsAhzfC3RqSjrzZwwTxuuv8ls1E5kT0EsYANfqpClImv0qibwd1w8R")          #os.environ.get("KEY")
-        api_secret = ("7jIgk6Pwp4WCGANWTi4hsThKjMITHKi1hLarlEssXs39oXhbf8T6P1XTVoWGeI0I")       #os.environ.get("SECRET")
-
-        print("KEY:", api_key)
-        print("SECRET:", api_secret)
-        
-        return api_key, api_secret
+    #dotenv_path = os.path.join(os.path.dirname(__file__), 'APIsKeyAndEmail.env')
+    #load_dotenv(dotenv_path)
+    api_key = ("QrRxR5wAtOzsAhzfC3RqSjrzZwwTxuuv8ls1E5kT0EsYANfqpClImv0qibwd1w8R") #os.environ.get("KEY")
+    api_secret = ("7jIgk6Pwp4WCGANWTi4hsThKjMITHKi1hLarlEssXs39oXhbf8T6P1XTVoWGeI0I") #os.environ.get("SECRET")   
+    print("KEY:", api_key)
+    print("SECRET:", api_secret)
+    return api_key, api_secret
 
 
 def initialize_binance(api_key, api_secret):
@@ -299,6 +296,11 @@ def send_email(subject, body, mse, corr, best_hyperparams, to_email, from_email,
         return False
 
 
+
+
+
+
+
 def main():
     while True:
         st.title("Deep learning Tradingbot")
@@ -312,20 +314,20 @@ def main():
 
             st.write("Le bouton a été cliqué !")
             train, val, test = fetch_data(binance)
-            
+
             # Créer deux colonnes pour afficher les ensembles de données
             col1, col2, col3 = st.columns(3)
-            
+
             with col1:
                 st.subheader("Ensemble de formation")
                 st.write(train.style.set_properties(**{'background-color': 'lightblue',
                                                         'color': 'black'}))
-            
+
             with col2:
                 st.subheader("Ensemble de validation")
                 st.write(val.style.set_properties(**{'background-color': 'lightgreen',
                                                       'color': 'black'}))
-            
+
             with col3:
                 st.subheader("Ensemble de test")
                 st.write(test.style.set_properties(**{'background-color': 'lightyellow',
