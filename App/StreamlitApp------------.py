@@ -385,9 +385,19 @@ def main():
             st.write(new_valeur_max_l2)
 
 
+
+
+
         with col_selectbox_5 :
-            optimizer = st.selectbox('Optimizer', 'adam', 'SGD')
-            st.write (optimizer)
+            optimizer = st.selectbox(
+                'How would you like to be contacted?',
+                ('Email', 'Home phone', 'Mobile phone'))
+
+            st.write('You selected:', optimizer)
+
+
+            #optimizer = st.selectbox('Optimizer', 'adam', 'SGD')
+            #st.write (optimizer)
 
 
 
