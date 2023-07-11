@@ -303,6 +303,8 @@ def send_email(subject, body, mse, corr, best_hyperparams, to_email, from_email,
 
 def main():
     while True:
+        import streamlit as st
+
         st.title("Deep learning Tradingbot")
 
 
