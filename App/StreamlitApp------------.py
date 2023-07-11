@@ -391,9 +391,8 @@ def main():
 
         with col_selectbox_5 :
             optimizer = st.selectbox(
-                'Optimizer?',
-                ('Adam'))
-
+                'Optimizer',
+                ('Adam','SGD', 'Adamax', 'Adagrad'))
             st.write(optimizer)
 
 
