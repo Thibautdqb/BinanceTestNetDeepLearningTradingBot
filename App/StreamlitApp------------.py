@@ -307,11 +307,11 @@ def main():
 
         st.title("Deep learning Tradingbot")
 
-
         api_key, api_secret = load_binance_api_keys()
         binance = initialize_binance(api_key, api_secret)
-
-        if st.button('Say hello'):
+        result = st.button ('Start Magic')
+        st.write(result)
+        if result :
             import streamlit as st
 
             st.write("Le bouton a été cliqué !")
@@ -321,19 +321,16 @@ def main():
             col1, col2, col3 = st.columns(3)
 
             with col1:
-                st.subheader("Ensemble de formation")
-                st.write(train.style.set_properties(**{'background-color': 'lightblue',
-                                                        'color': 'black'}))
+                with st.expander("Ensemble de formation"):
+                    st.write(train.style.set_properties(**{'background-color': 'lightblue', 'color': 'black'}))
 
             with col2:
-                st.subheader("Ensemble de validation")
-                st.write(val.style.set_properties(**{'background-color': 'lightgreen',
-                                                      'color': 'black'}))
+                with st.expander("Ensemble de validation"):
+                    st.write(val.style.set_properties(**{'background-color': 'lightgreen', 'color': 'black'}))
 
             with col3:
-                st.subheader("Ensemble de test")
-                st.write(test.style.set_properties(**{'background-color': 'lightyellow',
-                                           'color': 'black'}))
+                with st.expander("Ensemble de test"):
+                    st.write(test.style.set_properties(**{'background-color': 'lightyellow', 'color': 'black'}))
 
 
             X_train, y_train, X_val, y_val, X_test, y_test = load_csv_data()
