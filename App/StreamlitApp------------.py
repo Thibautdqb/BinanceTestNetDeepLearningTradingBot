@@ -319,7 +319,7 @@ def main():
         valeur_max_learning_rate = 0.01
 
         # Utiliser le widget slider avec les valeurs minimale et maximale
-        valeurs_learning_rate = st.slider("Sélectionnez une plage de valeurs", valeur_min_learning_rate, valeur_max_learning_rate, (valeur_min_learning_rate, valeur_max_learning_rate), step=0.001)
+        valeurs_learning_rate = st.slider("Sélectionnez une plage de valeurs", valeur_min_learning_rate, valeur_max_learning_rate, (valeur_min_learning_rate, valeur_max_learning_rate), step=0.001, key=1)
 
         # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
         new_valeur_min_learning_rate = valeurs_learning_rate[0]
@@ -337,7 +337,7 @@ def main():
         valeur_max_batch_size = 0.01
 
         # Utiliser le widget slider avec les valeurs minimale et maximale
-        valeurs_batch_size = st.slider("Sélectionnez une plage de valeurs", valeur_min_batch_size, valeur_max_batch_size, (valeur_min_batch_size, valeur_max_batch_size), step=0.001)
+        valeurs_batch_size = st.slider("Sélectionnez une plage de valeurs", valeur_min_batch_size, valeur_max_batch_size, (valeur_min_batch_size, valeur_max_batch_size), step=0.001, key=2)
 
         # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
         new_valeur_min_batch_size = valeurs_batch_size[0]
@@ -355,7 +355,7 @@ def main():
         valeur_max_epochs = 0.01
 
         # Utiliser le widget slider avec les valeurs minimale et maximale
-        valeurs_epochs = st.slider("Sélectionnez une plage de valeurs", valeur_min_epochs, valeur_max_epochs, (valeur_min_epochs, valeur_max_epochs), step=0.001)
+        valeurs_epochs = st.slider("Sélectionnez une plage de valeurs", valeur_min_epochs, valeur_max_epochs, (valeur_min_epochs, valeur_max_epochs), step=0.001, key=3)
 
         # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
         new_valeur_min_epochs = valeurs_epochs[0]
@@ -373,7 +373,7 @@ def main():
         valeur_max_l2 = 0.01
 
         # Utiliser le widget slider avec les valeurs minimale et maximale
-        valeurs_l2 = st.slider("Sélectionnez une plage de valeurs", valeur_min_l2, valeur_max_l2, (valeur_min_l2, valeur_max_l2), step=0.001)
+        valeurs_l2 = st.slider("Sélectionnez une plage de valeurs", valeur_min_l2, valeur_max_l2, (valeur_min_l2, valeur_max_l2), step=0.001, key=4)
 
         # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
         new_valeur_min_l2 = valeurs_l2[0]
@@ -396,7 +396,7 @@ def main():
         valeur_max_units = 0.01
 
         # Utiliser le widget slider avec les valeurs minimale et maximale
-        valeurs_units = st.slider("Sélectionnez une plage de valeurs", valeur_min_units, valeur_max_units, (valeur_min_units, valeur_max_units), step=0.001)
+        valeurs_units = st.slider("Sélectionnez une plage de valeurs", valeur_min_units, valeur_max_units, (valeur_min_units, valeur_max_units), step=0.001, key=5)
 
         # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
         new_valeur_min_units = valeurs_units[0]
@@ -414,7 +414,7 @@ def main():
         valeur_max_unit = 0.01
 
         # Utiliser le widget slider avec les valeurs minimale et maximale
-        valeurs_unit = st.slider("Sélectionnez une plage de valeurs", valeur_min_unit, valeur_max_unit, (valeur_min_unit, valeur_max_unit), step=0.001)
+        valeurs_unit = st.slider("Sélectionnez une plage de valeurs", valeur_min_unit, valeur_max_unit, (valeur_min_unit, valeur_max_unit), step=0.001, key=6)
 
         # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
         new_valeur_min_unit = valeurs_unit[0]
@@ -435,7 +435,7 @@ def main():
         valeur_max_dropout = 0.01
 
         # Utiliser le widget slider avec les valeurs minimale et maximale
-        valeurs_dropout = st.slider("Sélectionnez une plage de valeurs", valeur_min_dropout, valeur_max_dropout, (valeur_min_dropout, valeur_max_dropout), step=0.001)
+        valeurs_dropout = st.slider("Sélectionnez une plage de valeurs", valeur_min_dropout, valeur_max_dropout, (valeur_min_dropout, valeur_max_dropout), step=0.001, key=7 )
 
         # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
         new_valeur_min_dropout = valeurs_dropout[0]
