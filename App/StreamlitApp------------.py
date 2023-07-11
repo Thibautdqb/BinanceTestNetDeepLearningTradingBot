@@ -319,7 +319,7 @@ def main():
         valeur_max_learning_rate = 0.01
 
         # Utiliser le widget slider avec les valeurs minimale et maximale
-        valeurs_learning_rate = st.slider("Sélectionnez une plage de valeurs", valeur_min_learning_rate, valeur_max_learning_rate, (valeur_min_learning_rate, valeur_max_learning_rate))
+        valeurs_learning_rate = st.slider("Sélectionnez une plage de valeurs", valeur_min_learning_rate, valeur_max_learning_rate, (valeur_min_learning_rate, valeur_max_learning_rate), step=0.001)
 
         # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
         new_valeur_min_learning_rate = valeurs_learning_rate[0]
@@ -331,13 +331,121 @@ def main():
 
 
 
-        batch_size = st.slider('Batch Size', 32, 512, step=32, value=128)
-        epochs = st.slider('Epochs', 10, 100, step=10, value=50)
-        l2 = st.slider('L2', -10, -4, step=0.1, value=-6)
+
+                # Définir les valeurs minimale et maximale du slider
+        valeur_min_batch_size= 0.0001
+        valeur_max_batch_size = 0.01
+
+        # Utiliser le widget slider avec les valeurs minimale et maximale
+        valeurs_batch_size = st.slider("Sélectionnez une plage de valeurs", valeur_min_batch_size, valeur_max_batch_size, (valeur_min_batch_size, valeur_max_batch_size), step=0.001)
+
+        # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+        new_valeur_min_batch_size = valeurs_batch_size[0]
+        new_valeur_max_batch_size = valeurs_batch_size[1]
+
+        # Afficher les valeurs sélectionnées
+        st.write("Valeur minimale sélectionnée :", new_valeur_min_batch_size)
+        st.write("Valeur maximale sélectionnée :", new_valeur_max_batch_size)
+
+
+
+
+                # Définir les valeurs minimale et maximale du slider
+        valeur_min_epochs= 0.0001
+        valeur_max_epochs = 0.01
+
+        # Utiliser le widget slider avec les valeurs minimale et maximale
+        valeurs_epochs = st.slider("Sélectionnez une plage de valeurs", valeur_min_epochs, valeur_max_epochs, (valeur_min_epochs, valeur_max_epochs), step=0.001)
+
+        # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+        new_valeur_min_epochs = valeurs_epochs[0]
+        new_valeur_max_epochs = valeurs_epochs[1]
+
+        # Afficher les valeurs sélectionnées
+        st.write("Valeur minimale sélectionnée :", new_valeur_min_epochs)
+        st.write("Valeur maximale sélectionnée :", new_valeur_max_epochs)
+
+
+
+
+        # Définir les valeurs minimale et maximale du slider
+        valeur_min_l2= 0.0001
+        valeur_max_l2 = 0.01
+
+        # Utiliser le widget slider avec les valeurs minimale et maximale
+        valeurs_l2 = st.slider("Sélectionnez une plage de valeurs", valeur_min_l2, valeur_max_l2, (valeur_min_l2, valeur_max_l2), step=0.001)
+
+        # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+        new_valeur_min_l2 = valeurs_l2[0]
+        new_valeur_max_l2 = valeurs_l2[1]
+
+        # Afficher les valeurs sélectionnées
+        st.write("Valeur minimale sélectionnée :", new_valeur_min_l2)
+        st.write("Valeur maximale sélectionnée :", new_valeur_max_l2)
+
+
+
         optimizer = st.selectbox('Optimizer', 'adam', 'SGD')
-        units = st.slider('Units', 32, 512, step=32, value=256)
-        unit = st.slider('Unit', 32, 512, step=32, value=128)
+        st.write (optimizer)
+
+
+
+
+        # Définir les valeurs minimale et maximale du slider
+        valeur_min_units= 0.0001
+        valeur_max_units = 0.01
+
+        # Utiliser le widget slider avec les valeurs minimale et maximale
+        valeurs_units = st.slider("Sélectionnez une plage de valeurs", valeur_min_units, valeur_max_units, (valeur_min_units, valeur_max_units), step=0.001)
+
+        # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+        new_valeur_min_units = valeurs_units[0]
+        new_valeur_max_units = valeurs_units[1]
+
+        # Afficher les valeurs sélectionnées
+        st.write("Valeur minimale sélectionnée :", new_valeur_min_units)
+        st.write("Valeur maximale sélectionnée :", new_valeur_max_units)
+
+
+
+
+        # Définir les valeurs minimale et maximale du slider
+        valeur_min_unit= 0.0001
+        valeur_max_unit = 0.01
+
+        # Utiliser le widget slider avec les valeurs minimale et maximale
+        valeurs_unit = st.slider("Sélectionnez une plage de valeurs", valeur_min_unit, valeur_max_unit, (valeur_min_unit, valeur_max_unit), step=0.001)
+
+        # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+        new_valeur_min_unit = valeurs_unit[0]
+        new_valeur_max_unit = valeurs_unit[1]
+
+        # Afficher les valeurs sélectionnées
+        st.write("Valeur minimale sélectionnée :", new_valeur_min_unit)
+        st.write("Valeur maximale sélectionnée :", new_valeur_max_unit)
+
+
+
+
+
+
         dropout = st.slider('Dropout', 0.0, 0.5, step=0.1, value=0.2)
+                # Définir les valeurs minimale et maximale du slider
+        valeur_min_dropout= 0.0001
+        valeur_max_dropout = 0.01
+
+        # Utiliser le widget slider avec les valeurs minimale et maximale
+        valeurs_dropout = st.slider("Sélectionnez une plage de valeurs", valeur_min_dropout, valeur_max_dropout, (valeur_min_dropout, valeur_max_dropout), step=0.001)
+
+        # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+        new_valeur_min_dropout = valeurs_dropout[0]
+        new_valeur_max_dropout = valeurs_dropout[1]
+
+        # Afficher les valeurs sélectionnées
+        st.write("Valeur minimale sélectionnée :", new_valeur_min_dropout)
+        st.write("Valeur maximale sélectionnée :", new_valeur_max_dropout)
+
+
         
         result = st.button ('Start Magic')
 
@@ -373,13 +481,13 @@ def main():
             # Créer le dictionnaire des paramètres
             param_space = {
                 'learning_rate': (new_valeur_min_learning_rate, new_valeur_max_learning_rate),
-                'batch_size': batch_size,
-                'epochs': epochs,
+                'batch_size': (new_valeur_min_batch_size, new_valeur_max_batch_size),
+                'epochs': (new_valeur_min_epochs, new_valeur_max_epochs),
                 'l2': l2,
                 'optimizer': optimizer,
-                'units': units,
-                'unit': unit,
-                'dropout': dropout
+                'units': (new_valeur_min_units, new_valeur_max_units),
+                'unit': (new_valeur_min_unit, new_valeur_max_unit),
+                'dropout': (new_valeur_min_dropout, new_valeur_max_dropout),
             }
 
             trials = Trials()
