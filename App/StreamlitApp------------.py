@@ -314,7 +314,7 @@ def main():
         binance = initialize_binance(api_key, api_secret)
 
 
-        col_slider_1, col_slider_2, col_slider_3, col_slider_4, col_selectbox_5, col_slider_6, col_slider_7, col_slider_8 = st.columns(8)
+        col_slider_1, col_slider_2, col_slider_3, col_slider_4 = st.columns(4)
 
         with col_slider_1 :
             # Définir les valeurs minimale et maximale du slider
@@ -386,14 +386,15 @@ def main():
 
 
 
+        col_selectbox_5, col_slider_6, col_slider_7, col_slider_8 = st.columns(4)
 
 
         with col_selectbox_5 :
             optimizer = st.selectbox(
-                'How would you like to be contacted?',
-                ('Email', 'Home phone', 'Mobile phone'))
+                'Optimizer?',
+                ('Adam'))
 
-            st.write('You selected:', optimizer)
+            st.write(optimizer)
 
 
             #optimizer = st.selectbox('Optimizer', 'adam', 'SGD')
