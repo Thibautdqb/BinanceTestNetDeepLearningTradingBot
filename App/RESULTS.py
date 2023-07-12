@@ -87,14 +87,11 @@ def fetch_data(binance):
 
 
 
-def show_results(binance):
-    st.title("Page 2")
+def show_results():
+    st.title("DATA and RESULTS")
     st.write("Contenu de la page 2")
     
-
-
-
-    train, val, test = fetch_data(binance)
+    train, val, test = fetch_data()
     # Créer deux colonnes pour afficher les ensembles de données
     col1, col2, col3 = st.columns(3)
     with col1:
