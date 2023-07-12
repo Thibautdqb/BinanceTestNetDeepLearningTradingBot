@@ -503,13 +503,13 @@ def main():
 
             param_space = {
                 'learning_rate': hp.uniform('learning_rate', new_valeur_min_learning_rate, new_valeur_max_learning_rate),
-                'batch_size': hp.uniform(new_valeur_min_batch_size, new_valeur_max_batch_size),
-                'epochs': hp.uniform(new_valeur_min_epochs, new_valeur_max_epochs),
+                'batch_size': hp.uniform('batch_size',new_valeur_min_batch_size, new_valeur_max_batch_size),
+                'epochs': hp.uniform('epochs',new_valeur_min_epochs, new_valeur_max_epochs),
                 'l2': hp.loguniform('l2', -10, -4),
-                'optimizer': optimizer,
-                'units': hp.uniform(new_valeur_min_units, new_valeur_max_units),
-                'unit': hp.uniform(new_valeur_min_unit, new_valeur_max_unit),
-                'dropout': hp.uniform(new_valeur_min_dropout, new_valeur_max_dropout),
+                'optimizer': hp.choice('optimizer', optimizer),            
+                'units': hp.uniform('units', new_valeur_min_units, new_valeur_max_units),
+                'unit': hp.uniform('unit', new_valeur_min_unit, new_valeur_max_unit),
+                'dropout': hp.uniform('dropout', new_valeur_min_dropout, new_valeur_max_dropout),
             }
 
             trials = Trials()
