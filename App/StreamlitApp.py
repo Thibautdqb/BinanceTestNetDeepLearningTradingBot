@@ -502,7 +502,7 @@ def main():
 
 
             param_space = {
-                'learning_rate': hp.uniform(new_valeur_min_learning_rate, new_valeur_max_learning_rate),
+                'learning_rate': hp.uniform('learning_rate', new_valeur_min_learning_rate, new_valeur_max_learning_rate),
                 'batch_size': hp.uniform(new_valeur_min_batch_size, new_valeur_max_batch_size),
                 'epochs': hp.uniform(new_valeur_min_epochs, new_valeur_max_epochs),
                 'l2': hp.loguniform('l2', -10, -4),
