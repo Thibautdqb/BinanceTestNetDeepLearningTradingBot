@@ -330,7 +330,7 @@ def main():
 
         with col_slider_1 :
             # Définir les valeurs minimale et maximale du slider
-            valeur_min_learning_rate= 0.0001
+            valeur_min_learning_rate= 0.001
             valeur_max_learning_rate = 0.01
 
             # Utiliser le widget slider avec les valeurs minimale et maximale
@@ -345,8 +345,8 @@ def main():
             st.write(new_valeur_max_learning_rate)
 
         with col_slider_2 : 
-            valeur_min_batch_size= 0.0001
-            valeur_max_batch_size = 0.01
+            valeur_min_batch_size= 32
+            valeur_max_batch_size = 512
 
             # Utiliser le widget slider avec les valeurs minimale et maximale
             valeurs_batch_size = st.slider("Batch size", valeur_min_batch_size, valeur_max_batch_size, (valeur_min_batch_size, valeur_max_batch_size), step=0.001, key=2)
@@ -362,8 +362,8 @@ def main():
 
 
         with col_slider_3 :
-            valeur_min_epochs= 0.0001
-            valeur_max_epochs = 0.01
+            valeur_min_epochs= 10
+            valeur_max_epochs = 100
 
             # Utiliser le widget slider avec les valeurs minimale et maximale
             valeurs_epochs = st.slider("Epochs", valeur_min_epochs, valeur_max_epochs, (valeur_min_epochs, valeur_max_epochs), step=0.001, key=3)
@@ -380,8 +380,8 @@ def main():
 
         with col_slider_4 :
             # Définir les valeurs minimale et maximale du slider
-            valeur_min_l2= 0.0001
-            valeur_max_l2 = 0.01
+            valeur_min_l2= -10
+            valeur_max_l2 = -4
 
             # Utiliser le widget slider avec les valeurs minimale et maximale
             valeurs_l2 = st.slider("l2", valeur_min_l2, valeur_max_l2, (valeur_min_l2, valeur_max_l2), step=0.001, key=4)
@@ -413,8 +413,8 @@ def main():
 
         with col_slider_6 : 
             # Définir les valeurs minimale et maximale du slider
-            valeur_min_units= 0.0001
-            valeur_max_units = 0.01
+            valeur_min_units= 32
+            valeur_max_units = 512
 
             # Utiliser le widget slider avec les valeurs minimale et maximale
             valeurs_units = st.slider("Units", valeur_min_units, valeur_max_units, (valeur_min_units, valeur_max_units), step=0.001, key=5)
@@ -431,8 +431,8 @@ def main():
 
         with col_slider_7 : 
             # Définir les valeurs minimale et maximale du slider
-            valeur_min_unit= 0.0001
-            valeur_max_unit = 0.01
+            valeur_min_unit= 32
+            valeur_max_unit = 512
 
             # Utiliser le widget slider avec les valeurs minimale et maximale
             valeurs_unit = st.slider("Unit", valeur_min_unit, valeur_max_unit, (valeur_min_unit, valeur_max_unit), step=0.001, key=6)
@@ -451,8 +451,8 @@ def main():
 
         with col_slider_8: 
                 # Définir les valeurs minimale et maximale du slider
-            valeur_min_dropout= 0.0001
-            valeur_max_dropout = 0.01
+            valeur_min_dropout= 0
+            valeur_max_dropout = 0.5
 
             # Utiliser le widget slider avec les valeurs minimale et maximale
             valeurs_dropout = st.slider("Dropout", valeur_min_dropout, valeur_max_dropout, (valeur_min_dropout, valeur_max_dropout), step=0.001, key=7 )
