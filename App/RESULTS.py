@@ -43,7 +43,6 @@ from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 import pandas as pd
-from HYPERPARAMETERS import show_hyperparameters
 
 def load_binance_api_keys():
     #dotenv_path = os.path.join(os.path.dirname(__file__), 'APIsKeyAndEmail.env')

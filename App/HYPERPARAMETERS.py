@@ -1,7 +1,6 @@
 
 import streamlit as st
 import streamlit as st
-from RESULTS import show_results
 
 
 ###parameters
