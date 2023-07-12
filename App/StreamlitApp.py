@@ -39,6 +39,7 @@ from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 import pandas as pd
+from sklearn.metrics import mean_absolute_error, r2_score
 
 
 
@@ -517,20 +518,48 @@ def main():
             print("Best hyperparameters:", best)
             model = create_model(best)
             history = model.fit(X_train, y_train, batch_size=int(best['batch_size']), epochs=int(best['epochs']), validation_data=(X_val, y_val))
+            train_loss = history.history['loss']
+            val_loss = history.history['val_loss']
+            print("Train loss",train_loss)
+            print("Validation loss",val_loss)
+
             y_pred = model.predict(X_test)
+
+
             corr = np.corrcoef(y_test, y_pred.flatten())[0][1]
-            print("Final model correlation: ", corr)
+            print("Final model correlation:", corr)
+
             mse = mean_squared_error(y_test, y_pred)
             print("Mean squared error:", mse)
+
+            mae = mean_absolute_error(y_test, y_pred)
+            print("Mean absolute error:", mae)
+
+            rmse = np.sqrt(mse)
+            print("Root mean squared error:", rmse)
+
+            r2 = r2_score(y_test, y_pred)
+            print("R-squared score:", r2)
+
+
+            errors = np.abs(y_test - y_pred)
+
+            # Histogramme des erreurs
+            plt.hist(errors, bins=50)
+            plt.xlabel('Erreur')
+            plt.ylabel("Nombre d'occurrences")
+            plt.title('Histogramme de Repartition des erreurs')
+            plt.show()
+
             plt.plot(y_test, label='Données de test')
             plt.plot(y_pred, label='Prédictions')
+            plt.title('Histogramme de Repartition des erreurs')
             plt.legend()
 
-        
             trading_param_space = {
-                'threshold': hp.uniform('threshold', 0, 0.05),          ### editable parameters
-                'stop_loss': hp.uniform('stop_loss', 0, 0.01),          ### editable parameters
-                'take_profit': hp.uniform('take_profit', 0, 0.01)}      ### editable parameters
+                'threshold': hp.uniform('threshold', 0, 0.05),         
+                'stop_loss': hp.uniform('stop_loss', 0, 0.01),      
+                'take_profit': hp.uniform('take_profit', 0, 0.01)}  
             symbol='ETHUSDT'
             trading_trials = Trials()
             trading_best = fmin(lambda p: trading_objective(p, y_test, y_pred, binance, symbol), trading_param_space, algo=tpe.suggest, max_evals=200, trials=trading_trials, verbose=1)
