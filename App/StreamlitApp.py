@@ -332,7 +332,6 @@ def main():
             # Définir les valeurs minimale et maximale du slider
             valeur_min_learning_rate= 0.001
             valeur_max_learning_rate = 0.01
-
             # Utiliser le widget slider avec les valeurs minimale et maximale
             valeurs_learning_rate = st.slider("Learning rate", valeur_min_learning_rate, valeur_max_learning_rate, (valeur_min_learning_rate, valeur_max_learning_rate), step=0.001, key=1)
 
@@ -349,7 +348,7 @@ def main():
             valeur_max_batch_size = 512
 
             # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_batch_size = st.slider("Batch size", valeur_min_batch_size, valeur_max_batch_size, (valeur_min_batch_size, valeur_max_batch_size), step=0.001, key=2)
+            valeurs_batch_size = st.slider("Batch size", valeur_min_batch_size, valeur_max_batch_size, (valeur_min_batch_size, valeur_max_batch_size), step=1, key=2)
 
             # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
             new_valeur_min_batch_size = valeurs_batch_size[0]
@@ -451,7 +450,7 @@ def main():
 
         with col_slider_8: 
                 # Définir les valeurs minimale et maximale du slider
-            valeur_min_dropout= 0
+            valeur_min_dropout= 0.001
             valeur_max_dropout = 0.5
 
             # Utiliser le widget slider avec les valeurs minimale et maximale
