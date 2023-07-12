@@ -209,7 +209,7 @@ def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, 
     entry_price = 0
     trade_data = []
     trade_results = []  
-    quantity = st.slider("Percentage of the total balance to be exchanged", 0.1, 0.2, 0.3)  ### Percentage of the total balance to be exchanged (customise to suit your needs)
+    quantity = 0.1 ### Percentage of the total balance to be exchanged (customise to suit your needs)
 
     trade_count = 0  
     i = 0  
