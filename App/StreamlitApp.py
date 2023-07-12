@@ -545,16 +545,22 @@ def main():
             errors = np.abs(y_test - y_pred)
 
             # Histogramme des erreurs
+            st.subheader("Histogramme de Répartition des erreurs")
+            fig_hist = plt.figure()
             plt.hist(errors, bins=50)
             plt.xlabel('Erreur')
             plt.ylabel("Nombre d'occurrences")
-            plt.title('Histogramme de Repartition des erreurs')
-            plt.show()
+            plt.title('Histogramme de Répartition des erreurs')
+            st.pyplot(fig_hist)
 
+            # Graphique des prédictions
+            st.subheader("Graphique des Prédictions")
+            fig_pred = plt.figure()
             plt.plot(y_test, label='Données de test')
             plt.plot(y_pred, label='Prédictions')
-            plt.title('Histogramme de Repartition des erreurs')
+            plt.title('Graphique des Prédictions')
             plt.legend()
+            st.pyplot(fig_pred)
 
             trading_param_space = {
                 'threshold': hp.uniform('threshold', 0, 0.05),         
