@@ -454,7 +454,7 @@ def main():
             valeur_max_dropout = 0.5
 
             # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_dropout = st.slider("Dropout", valeur_min_dropout, valeur_max_dropout, (valeur_min_dropout, valeur_max_dropout), step=0,1, key=7 )
+            valeurs_dropout = st.slider("Dropout", valeur_min_dropout, valeur_max_dropout, (valeur_min_dropout, valeur_max_dropout), step=0.1, key=7 )
 
             # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
             new_valeur_min_dropout = valeurs_dropout[0]
