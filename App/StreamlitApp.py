@@ -579,7 +579,7 @@ def main():
                 valeur_max_thresold = 512
 
                 # Utiliser le widget slider avec les valeurs minimale et maximale
-                valeurs_thresold = st.slider("Thresold value", valeur_min_thresold, valeur_max_thresold, (valeur_min_thresold, valeur_max_thresold), step=1, key=6)
+                valeurs_thresold = st.slider("Thresold value", valeur_min_thresold, valeur_max_thresold, (valeur_min_thresold, valeur_max_thresold), step=1, key=8)
 
                 # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
                 new_valeur_min_thresold = valeurs_thresold[0]
@@ -594,7 +594,7 @@ def main():
                 valeur_max_stop_loss = 512
 
                 # Utiliser le widget slider avec les valeurs minimale et maximale
-                valeurs_stop_loss = st.slider("Stop Loss Value", valeur_min_stop_loss, valeur_max_stop_loss, (valeur_min_stop_loss, valeur_max_stop_loss), step=1, key=6)
+                valeurs_stop_loss = st.slider("Stop Loss Value", valeur_min_stop_loss, valeur_max_stop_loss, (valeur_min_stop_loss, valeur_max_stop_loss), step=1, key=9)
 
                 # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
                 new_valeur_min_stop_loss = valeurs_stop_loss[0]
@@ -610,7 +610,7 @@ def main():
                 valeur_max_take_profit = 512
 
                 # Utiliser le widget slider avec les valeurs minimale et maximale
-                valeurs_take_profit = st.slider("Take profit value", valeur_min_take_profit, valeur_max_take_profit, (valeur_min_take_profit, valeur_max_take_profit), step=1, key=6)
+                valeurs_take_profit = st.slider("Take profit value", valeur_min_take_profit, valeur_max_take_profit, (valeur_min_take_profit, valeur_max_take_profit), step=1, key=10)
 
                 # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
                 new_valeur_min_take_profit = valeurs_take_profit[0]
