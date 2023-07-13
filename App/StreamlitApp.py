@@ -316,8 +316,6 @@ def on_click():
 
     # Show a message saying that the work is done.
     st.write('The work is done!')
-    # Create the button.
-st_param_model = st.button ('Start Magic')
 
 
 
@@ -486,7 +484,7 @@ def main():
         
         st_param_model = st.button ('Start Magic')
 
-        st.write(st_param_model)
+        st.write(st_param_model, on_click)
         if st_param_model :
 
             st.write("Le bouton a été cliqué !")
