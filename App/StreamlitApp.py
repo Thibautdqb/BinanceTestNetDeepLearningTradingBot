@@ -484,15 +484,15 @@ def main():
 
             with col1:
                 with st.expander("Ensemble de formation"):
-                    st.dataframe(train.style.set_properties(**{'background-color': 'lightblue', 'color': 'black'}))
+                    st.dataframe(train.style.set_properties(**{'background-color': 'lightblue' }))
 
             with col2:
                 with st.expander("Ensemble de validation"):
-                    st.dataframe(val.style.set_properties(**{'background-color': 'lightgreen', 'color': 'black'}))
+                    st.dataframe(val.style.set_properties(**{'background-color': 'lightgreen'}))
 
             with col3:
                 with st.expander("Ensemble de test"):
-                    st.dataframe(test.style.set_properties(**{'background-color': 'lightyellow', 'color': 'black'}))
+                    st.dataframe(test.style.set_properties(**{'background-color': 'lightyellow'}))
 
 
 
