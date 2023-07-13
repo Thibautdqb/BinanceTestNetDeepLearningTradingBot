@@ -531,7 +531,7 @@ def main():
             for i in range(max_evals):
                 print("Progression :", progress(i, max_evals))
                 current_best = fmin(lambda p: objective(p, X_train, y_train, X_val, y_val), param_space, algo=tpe.suggest, max_evals=1, trials=trials)
-                if best is None or current_best['loss'] < best['loss']:
+                if 'loss' in current_best and (best is None or current_best['loss'] < best.get('loss', float('inf'))):
                     best = current_best
             
             best['optimizer'] = optimizer[best['optimizer']]
