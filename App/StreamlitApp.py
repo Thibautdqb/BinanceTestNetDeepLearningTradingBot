@@ -621,14 +621,14 @@ def main():
                 st.write(new_valeur_max_take_profit)
 
 
-            st_param_trad = st.button ('Start Magic')
+            st_param_trad = st.button ('Start Trading !!!')
 
             st.write(st_param_trad)
             if st_param_trad :
-                st.write("Le bouton a été cliqué !")
+                st.write("OK !")
 
             else:
-                st.write('Goodbye')
+                st.write('NOPE')
 
 
             trading_param_space = {
@@ -651,7 +651,7 @@ def main():
                 print("E-mail failed to be sent")
 
         else:
-            st.write('Goodbye')
+            st.write('Ciao')
 
 
 if __name__ == '__main__':
