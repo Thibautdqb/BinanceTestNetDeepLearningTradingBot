@@ -621,34 +621,37 @@ def main():
                 st.write(new_valeur_max_take_profit)
 
 
+
+
+
             st_param_trad = st.button ('Start Trading !!!')
 
             st.write(st_param_trad)
             if st_param_trad :
                 st.write("OK !")
-
+                trading_param_space = {
+                            'threshold': hp.uniform('threshold', new_valeur_min_thresold, new_valeur_max_thresold),         
+                            'stop_loss': hp.uniform('stop_loss', new_valeur_min_stop_loss, new_valeur_max_stop_loss),      
+                            'take_profit': hp.uniform('take_profit', new_valeur_min_take_profit, new_valeur_max_take_profit)}  
+                symbol='ETHUSDT'
+                trading_trials = Trials()
+                trading_best = fmin(lambda p: trading_objective(p, y_test, y_pred, binance, symbol), trading_param_space, algo=tpe.suggest, max_evals=200, trials=trading_trials, verbose=1)
+                print("Best trading parameters : ", trading_best)
+                solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
+                subject = "Model performance report"
+                body = "Final balance: {:.2f}".format(solde_final)
+                to_email = email_streamlit
+                from_email = os.environ.get("FROMEMAIL")
+                password = os.environ.get("EMAILPASSWORD") 
+                if send_email(subject, body, mse, corr, best, to_email, from_email, password):
+                    print("E-mail sent with success")
+                else:
+                    print("E-mail failed to be sent")
             else:
                 st.write('NOPE')
 
 
-            trading_param_space = {
-                'threshold': hp.uniform('threshold', new_valeur_min_thresold, new_valeur_max_thresold),         
-                'stop_loss': hp.uniform('stop_loss', new_valeur_min_stop_loss, new_valeur_max_stop_loss),      
-                'take_profit': hp.uniform('take_profit', new_valeur_min_take_profit, new_valeur_max_take_profit)}  
-            symbol='ETHUSDT'
-            trading_trials = Trials()
-            trading_best = fmin(lambda p: trading_objective(p, y_test, y_pred, binance, symbol), trading_param_space, algo=tpe.suggest, max_evals=200, trials=trading_trials, verbose=1)
-            print("Best trading parameters : ", trading_best)
-            solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
-            subject = "Model performance report"
-            body = "Final balance: {:.2f}".format(solde_final)
-            to_email = email_streamlit
-            from_email = os.environ.get("FROMEMAIL")
-            password = os.environ.get("EMAILPASSWORD") 
-            if send_email(subject, body, mse, corr, best, to_email, from_email, password):
-                print("E-mail sent with success")
-            else:
-                print("E-mail failed to be sent")
+            
 
         else:
             st.write('Ciao')
