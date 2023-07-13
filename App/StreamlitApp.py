@@ -513,7 +513,7 @@ def main():
             }
 
             trials = Trials()
-            best = fmin(lambda p: objective(p, X_train, y_train, X_val, y_val), param_space, algo=tpe.suggest, max_evals=10, trials=trials)
+            best = fmin(lambda p: objective(p, X_train, y_train, X_val, y_val), param_space, algo=tpe.suggest, max_evals=1, trials=trials)
             best['optimizer'] = optimizer[best['optimizer']]
             print("Best hyperparameters:", best)
             model = create_model(best)
@@ -545,9 +545,13 @@ def main():
             errors = np.abs(y_test - y_pred)
 
             # Histogramme des erreurs
+            import matplotlib.pyplot as plt
+            import streamlit as st
+
+            # Histogramme de Répartition des erreurs
             st.subheader("Histogramme de Répartition des erreurs")
             fig_hist = plt.figure()
-            plt.hist(errors, bins=50)
+            plt.hist(errors, bins=50, color='skyblue')
             plt.xlabel('Erreur')
             plt.ylabel("Nombre d'occurrences")
             plt.title('Histogramme de Répartition des erreurs')
@@ -556,11 +560,14 @@ def main():
             # Graphique des prédictions
             st.subheader("Graphique des Prédictions")
             fig_pred = plt.figure()
-            plt.plot(y_test, label='Données de test')
-            plt.plot(y_pred, label='Prédictions')
+            plt.plot(y_test, label='Données de test', color='blue')
+            plt.plot(y_pred, label='Prédictions', color='green', linestyle='--')
             plt.title('Graphique des Prédictions')
+            plt.xlabel('Index')
+            plt.ylabel('Valeur')
             plt.legend()
             st.pyplot(fig_pred)
+
 
             trading_param_space = {
                 'threshold': hp.uniform('threshold', 0, 0.05),         
