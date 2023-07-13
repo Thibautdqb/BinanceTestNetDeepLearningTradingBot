@@ -482,7 +482,7 @@ def main():
 
 
         
-        st_param_model = st.button ('Start Magic', on_click)
+        st_param_model = st.button ('Start Magic', on_click=on_click)
 
         st.write(st_param_model)
         if st_param_model :
