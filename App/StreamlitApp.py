@@ -308,15 +308,11 @@ def validate_email(email):
     return False
 
 
-def on_click():
-    # Do some work that takes a few seconds.
-    for i in range(10):
-        time.sleep(0.1)
-        st.progress(i / 10)
 
-    # Show a message saying that the work is done.
-    st.write('The work is done!')
 
+def progress(current_eval, max_evals):
+    progress = (current_eval + 1) / max_evals
+    return progress
 
 
 def main():
@@ -482,7 +478,7 @@ def main():
 
 
         
-        st_param_model = st.button ('Start Magic', on_click=on_click)
+        st_param_model = st.button ('Start Magic')
 
         st.write(st_param_model)
         if st_param_model :
@@ -527,16 +523,29 @@ def main():
                 'dropout': hp.uniform('dropout', new_valeur_min_dropout, new_valeur_max_dropout),
             }
 
+
             trials = Trials()
-            best = fmin(lambda p: objective(p, X_train, y_train, X_val, y_val), param_space, algo=tpe.suggest, max_evals=1, trials=trials)
+            best = None
+            max_evals = 10  # Définissez la valeur de max_evals ici
+            
+            for i in range(max_evals):
+                print("Progression :", progress(i, max_evals))
+                current_best = fmin(lambda p: objective(p, X_train, y_train, X_val, y_val), param_space, algo=tpe.suggest, max_evals=1, trials=trials)
+                if best is None or current_best['loss'] < best['loss']:
+                    best = current_best
+            
             best['optimizer'] = optimizer[best['optimizer']]
-            print("Best hyperparameters:", best)
+            print("Meilleurs hyperparamètres : ", best)
+            
             model = create_model(best)
             history = model.fit(X_train, y_train, batch_size=int(best['batch_size']), epochs=int(best['epochs']), validation_data=(X_val, y_val))
             train_loss = history.history['loss']
             val_loss = history.history['val_loss']
-            print("Train loss",train_loss)
-            print("Validation loss",val_loss)
+            print("Train loss", train_loss)
+            print("Validation loss", val_loss)
+        
+
+
 
             y_pred = model.predict(X_test)
 
