@@ -527,11 +527,13 @@ def main():
             trials = Trials()
             best = None
             max_evals = 10  # Définissez la valeur de max_evals ici
-
+            
             for i in range(max_evals):
                 print("Progression :", progress(i, max_evals))
-                best = fmin(lambda p: objective(p, X_train, y_train, X_val, y_val), param_space, algo=tpe.suggest, max_evals=1, trials=trials)
-                
+                current_best = fmin(lambda p: objective(p, X_train, y_train, X_val, y_val), param_space, algo=tpe.suggest, max_evals=1, trials=trials)
+                if best is None or current_best['loss'] < best['loss']:
+                    best = current_best
+            
             best['optimizer'] = optimizer[best['optimizer']]
             print("Meilleurs hyperparamètres : ", best)
             
