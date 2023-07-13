@@ -482,9 +482,9 @@ def main():
 
 
         
-        st_param_model = st.button ('Start Magic')
+        st_param_model = st.button ('Start Magic', on_click)
 
-        st.write(st_param_model, on_click)
+        st.write(st_param_model)
         if st_param_model :
 
             st.write("Le bouton a été cliqué !")
