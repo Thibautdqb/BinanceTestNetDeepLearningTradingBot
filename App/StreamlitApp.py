@@ -555,7 +555,7 @@ def main():
             # Histogramme de Répartition des erreurs
             st.subheader("Histogramme de Répartition des erreurs")
             fig_hist = plt.figure()
-            plt.hist(errors, bins=50, color='skyblue')
+            plt.hist(errors, bins=50)
             plt.xlabel('Erreur')
             plt.ylabel("Nombre d'occurrences")
             plt.title('Histogramme de Répartition des erreurs')
