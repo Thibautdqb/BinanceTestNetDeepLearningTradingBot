@@ -484,15 +484,15 @@ def main():
 
             with col1:
                 with st.expander("Ensemble de formation"):
-                    st.dataframe(train.style.set_properties(**{'background-color': 'lightblue' }))
+                    st.dataframe(train.style.set_properties(**{'background-color': 'lightblue', 'color': 'black'}))
 
             with col2:
                 with st.expander("Ensemble de validation"):
-                    st.dataframe(val.style.set_properties(**{'background-color': 'lightgreen'}))
+                    st.dataframe(val.style.set_properties(**{'background-color': 'lightgreen', 'color': 'black'}))
 
             with col3:
                 with st.expander("Ensemble de test"):
-                    st.dataframe(test.style.set_properties(**{'background-color': 'lightyellow'}))
+                    st.dataframe(test.style.set_properties(**{'background-color': 'lightyellow', 'color': 'black'}))
 
 
 
@@ -564,14 +564,11 @@ def main():
             # Graphique des prédictions
             st.subheader("Graphique des Prédictions")
             fig_pred = plt.figure()
-            plt.plot(y_test, label='Données de test', color='blue')
-            plt.plot(y_pred, label='Prédictions', color='green', linestyle='--')
+            plt.plot(y_test, label='Données de test')
+            plt.plot(y_pred, label='Prédictions')
             plt.title('Graphique des Prédictions')
-            plt.xlabel('Index')
-            plt.ylabel('Valeur')
             plt.legend()
             st.pyplot(fig_pred)
-
 
             trading_param_space = {
                 'threshold': hp.uniform('threshold', 0, 0.05),         
