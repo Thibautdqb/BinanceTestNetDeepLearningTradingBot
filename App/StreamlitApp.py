@@ -471,10 +471,10 @@ def main():
 
 
         
-        result = st.button ('Start Magic')
+        st_param_model = st.button ('Start Magic')
 
-        st.write(result)
-        if result :
+        st.write(st_param_model)
+        if st_param_model :
 
             st.write("Le bouton a été cliqué !")
             train, val, test = fetch_data(binance)
@@ -570,10 +570,71 @@ def main():
             plt.legend()
             st.pyplot(fig_pred)
 
+
+
+            col_thresold, col_stop_loss, col_take_profit = st.columns(3)
+
+            with col_thresold:
+                valeur_min_thresold= 32
+                valeur_max_thresold = 512
+
+                # Utiliser le widget slider avec les valeurs minimale et maximale
+                valeurs_thresold = st.slider("Thresold value", valeur_min_thresold, valeur_max_thresold, (valeur_min_thresold, valeur_max_thresold), step=1, key=6)
+
+                # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+                new_valeur_min_thresold = valeurs_thresold[0]
+                new_valeur_max_thresold = valeurs_thresold[1]
+
+                # Afficher les valeurs sélectionnées
+                st.write(new_valeur_min_thresold)
+                st.write(new_valeur_max_thresold)
+
+            with col_stop_loss:
+                valeur_min_stop_loss= 32
+                valeur_max_stop_loss = 512
+
+                # Utiliser le widget slider avec les valeurs minimale et maximale
+                valeurs_stop_loss = st.slider("Stop Loss Value", valeur_min_stop_loss, valeur_max_stop_loss, (valeur_min_stop_loss, valeur_max_stop_loss), step=1, key=6)
+
+                # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+                new_valeur_min_stop_loss = valeurs_stop_loss[0]
+                new_valeur_max_stop_loss = valeurs_stop_loss[1]
+
+                # Afficher les valeurs sélectionnées
+                st.write(new_valeur_min_stop_loss)
+                st.write(new_valeur_max_stop_loss)
+
+
+            with col_take_profit:
+                valeur_min_take_profit= 32
+                valeur_max_take_profit = 512
+
+                # Utiliser le widget slider avec les valeurs minimale et maximale
+                valeurs_take_profit = st.slider("Take profit value", valeur_min_take_profit, valeur_max_take_profit, (valeur_min_take_profit, valeur_max_take_profit), step=1, key=6)
+
+                # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+                new_valeur_min_take_profit = valeurs_take_profit[0]
+                new_valeur_max_take_profit = valeurs_take_profit[1]
+
+                # Afficher les valeurs sélectionnées
+                st.write(new_valeur_min_take_profit)
+                st.write(new_valeur_max_take_profit)
+
+
+            st_param_trad = st.button ('Start Magic')
+
+            st.write(st_param_trad)
+            if st_param_trad :
+                st.write("Le bouton a été cliqué !")
+
+            else:
+                st.write('Goodbye')
+
+
             trading_param_space = {
-                'threshold': hp.uniform('threshold', 0, 0.05),         
-                'stop_loss': hp.uniform('stop_loss', 0, 0.01),      
-                'take_profit': hp.uniform('take_profit', 0, 0.01)}  
+                'threshold': hp.uniform('threshold', new_valeur_min_thresold, new_valeur_max_thresold),         
+                'stop_loss': hp.uniform('stop_loss', new_valeur_min_stop_loss, new_valeur_max_stop_loss),      
+                'take_profit': hp.uniform('take_profit', new_valeur_min_take_profit, new_valeur_max_take_profit)}  
             symbol='ETHUSDT'
             trading_trials = Trials()
             trading_best = fmin(lambda p: trading_objective(p, y_test, y_pred, binance, symbol), trading_param_space, algo=tpe.suggest, max_evals=200, trials=trading_trials, verbose=1)
