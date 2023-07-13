@@ -311,7 +311,7 @@ def validate_email(email):
 def on_click():
     # Do some work that takes a few seconds.
     for i in range(10):
-        time.sleep(0.1)
+        time.sleep(5)
         st.progress(i / 10)
 
     # Show a message saying that the work is done.
