@@ -332,7 +332,7 @@ def main():
         binance = initialize_binance(api_key, api_secret)
         st.title("Formulaire d'adresse e-mail")
         
-        email_streamlit = st.text_input("Entrez votre adresse e-mail", key=11)
+        email_streamlit = st.text_input("Entrez votre adresse e-mail", key=1)
         if st.button("Valider"):
             if validate_email(email_streamlit):
                 st.success("Adresse e-mail valide !")
@@ -349,7 +349,7 @@ def main():
             valeur_min_learning_rate= 0.001
             valeur_max_learning_rate = 0.01
             # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_learning_rate = st.slider("Learning rate", valeur_min_learning_rate, valeur_max_learning_rate, (valeur_min_learning_rate, valeur_max_learning_rate), step=0.001, key=1)
+            valeurs_learning_rate = st.slider("Learning rate", valeur_min_learning_rate, valeur_max_learning_rate, (valeur_min_learning_rate, valeur_max_learning_rate), step=0.001, key=2)
 
             # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
             new_valeur_min_learning_rate = valeurs_learning_rate[0]
@@ -364,7 +364,7 @@ def main():
             valeur_max_batch_size = 512
 
             # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_batch_size = st.slider("Batch size", valeur_min_batch_size, valeur_max_batch_size, (valeur_min_batch_size, valeur_max_batch_size), step=1, key=2)
+            valeurs_batch_size = st.slider("Batch size", valeur_min_batch_size, valeur_max_batch_size, (valeur_min_batch_size, valeur_max_batch_size), step=1, key=3)
 
             # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
             new_valeur_min_batch_size = valeurs_batch_size[0]
@@ -381,7 +381,7 @@ def main():
             valeur_max_epochs = 100
 
             # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_epochs = st.slider("Epochs", valeur_min_epochs, valeur_max_epochs, (valeur_min_epochs, valeur_max_epochs), step=1, key=3)
+            valeurs_epochs = st.slider("Epochs", valeur_min_epochs, valeur_max_epochs, (valeur_min_epochs, valeur_max_epochs), step=1, key=4)
 
             # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
             new_valeur_min_epochs = valeurs_epochs[0]
@@ -399,7 +399,7 @@ def main():
             valeur_max_l2 = -4
 
             # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_l2 = st.slider("l2", valeur_min_l2, valeur_max_l2, (valeur_min_l2, valeur_max_l2), step=1, key=4)
+            valeurs_l2 = st.slider("l2", valeur_min_l2, valeur_max_l2, (valeur_min_l2, valeur_max_l2), step=1, key=5)
 
             # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
             new_valeur_min_l2 = valeurs_l2[0]
@@ -432,7 +432,7 @@ def main():
             valeur_max_units = 512
 
             # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_units = st.slider("Units", valeur_min_units, valeur_max_units, (valeur_min_units, valeur_max_units), step=1, key=5)
+            valeurs_units = st.slider("Units", valeur_min_units, valeur_max_units, (valeur_min_units, valeur_max_units), step=1, key=6)
 
             # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
             new_valeur_min_units = valeurs_units[0]
@@ -450,7 +450,7 @@ def main():
             valeur_max_unit = 512
 
             # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_unit = st.slider("Unit", valeur_min_unit, valeur_max_unit, (valeur_min_unit, valeur_max_unit), step=1, key=6)
+            valeurs_unit = st.slider("Unit", valeur_min_unit, valeur_max_unit, (valeur_min_unit, valeur_max_unit), step=1, key=7)
 
             # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
             new_valeur_min_unit = valeurs_unit[0]
@@ -470,7 +470,7 @@ def main():
             valeur_max_dropout = 0.5
 
             # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_dropout = st.slider("Dropout", valeur_min_dropout, valeur_max_dropout, (valeur_min_dropout, valeur_max_dropout), step=0.1, key=7 )
+            valeurs_dropout = st.slider("Dropout", valeur_min_dropout, valeur_max_dropout, (valeur_min_dropout, valeur_max_dropout), step=0.1, key=8 )
 
             # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
             new_valeur_min_dropout = valeurs_dropout[0]
@@ -589,7 +589,7 @@ def main():
                 valeur_max_thresold = 512
 
                 # Utiliser le widget slider avec les valeurs minimale et maximale
-                valeurs_thresold = st.slider("Thresold value", valeur_min_thresold, valeur_max_thresold, (valeur_min_thresold, valeur_max_thresold), step=1, key=8)
+                valeurs_thresold = st.slider("Thresold value", valeur_min_thresold, valeur_max_thresold, (valeur_min_thresold, valeur_max_thresold), step=1, key=9)
 
                 # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
                 new_valeur_min_thresold = valeurs_thresold[0]
@@ -604,7 +604,7 @@ def main():
                 valeur_max_stop_loss = 512
 
                 # Utiliser le widget slider avec les valeurs minimale et maximale
-                valeurs_stop_loss = st.slider("Stop Loss Value", valeur_min_stop_loss, valeur_max_stop_loss, (valeur_min_stop_loss, valeur_max_stop_loss), step=1, key=9)
+                valeurs_stop_loss = st.slider("Stop Loss Value", valeur_min_stop_loss, valeur_max_stop_loss, (valeur_min_stop_loss, valeur_max_stop_loss), step=1, key=10)
 
                 # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
                 new_valeur_min_stop_loss = valeurs_stop_loss[0]
@@ -620,7 +620,7 @@ def main():
                 valeur_max_take_profit = 512
 
                 # Utiliser le widget slider avec les valeurs minimale et maximale
-                valeurs_take_profit = st.slider("Take profit value", valeur_min_take_profit, valeur_max_take_profit, (valeur_min_take_profit, valeur_max_take_profit), step=1, key=10)
+                valeurs_take_profit = st.slider("Take profit value", valeur_min_take_profit, valeur_max_take_profit, (valeur_min_take_profit, valeur_max_take_profit), step=1, key=11)
 
                 # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
                 new_valeur_min_take_profit = valeurs_take_profit[0]
