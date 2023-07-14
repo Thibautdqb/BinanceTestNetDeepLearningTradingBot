@@ -483,6 +483,8 @@ def main():
     with col3:
         with st.expander("Ensemble de test"):
             st.dataframe(test.style.set_properties(**{'background-color': 'lightyellow', 'color': 'black'}))
+
+            
         X_train, y_train, X_val, y_val, X_test, y_test = load_csv_data()
         X_train, X_val, X_test = reshape_data(X_train, X_val, X_test)
         param_space = {
@@ -536,60 +538,25 @@ def main():
         plt.title('Graphique des Prédictions')
         plt.legend()
         st.pyplot(fig_pred)
-        col_thresold, col_stop_loss, col_take_profit = st.columns(3)
-        with col_thresold:
-            valeur_min_thresold= 32
-            valeur_max_thresold = 512
-            # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_thresold = st.slider("Thresold value", valeur_min_thresold, valeur_max_thresold, (valeur_min_thresold, valeur_max_thresold), step=1, key=9)
-            # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
-            new_valeur_min_thresold = valeurs_thresold[0]
-            new_valeur_max_thresold = valeurs_thresold[1]
-            # Afficher les valeurs sélectionnées
-            st.write(new_valeur_min_thresold)
-            st.write(new_valeur_max_thresold)
-        with col_stop_loss:
-            valeur_min_stop_loss= 32
-            valeur_max_stop_loss = 512
-            # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_stop_loss = st.slider("Stop Loss Value", valeur_min_stop_loss, valeur_max_stop_loss, (valeur_min_stop_loss, valeur_max_stop_loss), step=1, key=10)
-            # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
-            new_valeur_min_stop_loss = valeurs_stop_loss[0]
-            new_valeur_max_stop_loss = valeurs_stop_loss[1]
-            # Afficher les valeurs sélectionnées
-            st.write(new_valeur_min_stop_loss)
-            st.write(new_valeur_max_stop_loss)
-        with col_take_profit:
-            valeur_min_take_profit= 32
-            valeur_max_take_profit = 512
-            # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_take_profit = st.slider("Take profit value", valeur_min_take_profit, valeur_max_take_profit, (valeur_min_take_profit, valeur_max_take_profit), step=1, key=11)
-            # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
-            new_valeur_min_take_profit = valeurs_take_profit[0]
-            new_valeur_max_take_profit = valeurs_take_profit[1]
-            # Afficher les valeurs sélectionnées
-            st.write(new_valeur_min_take_profit)
-            st.write(new_valeur_max_take_profit)
-
-
-            trading_param_space = {
-                        'threshold': hp.uniform('threshold', new_valeur_min_thresold, new_valeur_max_thresold),         
-                        'stop_loss': hp.uniform('stop_loss', new_valeur_min_stop_loss, new_valeur_max_stop_loss),      
-                        'take_profit': hp.uniform('take_profit', new_valeur_min_take_profit, new_valeur_max_take_profit)}  
-            symbol='ETHUSDT'
-            trading_trials = Trials()
-            trading_best = fmin(lambda p: trading_objective(p, y_test, y_pred, binance, symbol), trading_param_space, algo=tpe.suggest, max_evals=200, trials=trading_trials, verbose=1)
-            print("Best trading parameters : ", trading_best)
-            solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
-            subject = "Model performance report"
-            body = "Final balance: {:.2f}".format(solde_final)
-            to_email = email_streamlit
-            from_email = os.environ.get("FROMEMAIL")
-            password = os.environ.get("EMAILPASSWORD") 
-            if send_email(subject, body, mse, corr, best, to_email, from_email, password):
-                print("E-mail sent with success")
-            else:
-                print("E-mail failed to be sent")
+        
+        trading_param_space = {
+                    'threshold': hp.uniform('threshold', new_valeur_min_thresold, new_valeur_max_thresold),         
+                    'stop_loss': hp.uniform('stop_loss', new_valeur_min_stop_loss, new_valeur_max_stop_loss),      
+                    'take_profit': hp.uniform('take_profit', new_valeur_min_take_profit, new_valeur_max_take_profit)}  
+        symbol='ETHUSDT'
+        trading_trials = Trials()
+        trading_best = fmin(lambda p: trading_objective(p, y_test, y_pred, binance, symbol), trading_param_space, algo=tpe.suggest, max_evals=200, trials=trading_trials, verbose=1)
+        print("Best trading parameters : ", trading_best)
+        solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
+        subject = "Model performance report"
+        body = "Final balance: {:.2f}".format(solde_final)
+        to_email = email_streamlit
+        from_email = os.environ.get("FROMEMAIL")
+        password = os.environ.get("EMAILPASSWORD") 
+        if send_email(subject, body, mse, corr, best, to_email, from_email, password):
+            print("E-mail sent with success")
+        else:
+            print("E-mail failed to be sent")
 
         
 
