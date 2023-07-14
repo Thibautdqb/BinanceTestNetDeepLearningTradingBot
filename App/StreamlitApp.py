@@ -44,7 +44,7 @@ from sklearn.metrics import mean_absolute_error, r2_score
 
 
 
-
+@st.cache_data
 def load_binance_api_keys():
     #dotenv_path = os.path.join(os.path.dirname(__file__), 'APIsKeyAndEmail.env')
     #load_dotenv(dotenv_path)
@@ -54,12 +54,13 @@ def load_binance_api_keys():
     print("SECRET:", api_secret)
     return api_key, api_secret
 
-
+@st.cache_data
 def initialize_binance(api_key, api_secret):
     binance = Client(api_key, api_secret, testnet=True)
     return binance
 
 
+@st.cache_data
 
 def fetch_data(binance):
     klines = binance.get_historical_klines("ETHUSDT", Client.KLINE_INTERVAL_1MINUTE, "1000 minute ago UTC")  ### editable parameters
@@ -87,6 +88,7 @@ def fetch_data(binance):
     return train, val, test
 
 
+@st.cache_data
 
 def load_csv_data():
     test_data = pd.read_csv("test_data.csv", delimiter=';', header=0, usecols=[1, 2, 3])
@@ -107,6 +109,7 @@ def reshape_data(X_train, X_val, X_test):
 
     return X_train, X_val, X_test
 
+@st.cache_data
 
 ####Editable model structure
 def create_model(params):
@@ -117,6 +120,7 @@ def create_model(params):
     model.compile(optimizer=Adam(learning_rate=params['learning_rate']), loss='mse') ### editable parameters(for instance mea...)
     return model
 
+@st.cache_data
 
 def objective(params, X_train, y_train, X_val, y_val):
     model = create_model(params)
@@ -127,6 +131,7 @@ def objective(params, X_train, y_train, X_val, y_val):
     print("MSE: {:.5f} | Correlation: {:.5f}".format(val_loss, corr))
     return {'loss': val_loss, 'status': STATUS_OK}
 
+@st.cache_data
 
 def calculate_return(entry_price, exit_price, position):
     if position == 1: # Long position
@@ -138,7 +143,7 @@ def calculate_return(entry_price, exit_price, position):
 
 
 
-
+@st.cache_data
 def generate_signals(y_pred, threshold, stop_loss, take_profit):
     signals = []
     for i, pred in enumerate(y_pred):
@@ -154,6 +159,9 @@ def generate_signals(y_pred, threshold, stop_loss, take_profit):
     return signals
 
 
+
+
+@st.cache_data
 def trading_objective(params, y_test, y_pred, binance, symbol):
     threshold = params['threshold']
     stop_loss = params['stop_loss']
@@ -187,6 +195,9 @@ def trading_objective(params, y_test, y_pred, binance, symbol):
     return {'loss': -cumulative_return, 'status': STATUS_OK}
 
 
+
+
+@st.cache_data
 def place_order(binance, symbol, side, quantity):
     try:
         order = binance.create_order(
@@ -201,7 +212,9 @@ def place_order(binance, symbol, side, quantity):
     except BinanceOrderException as e:
         print(f"Binance Order Exception: {e}")
         return False
+    
 
+@st.cache_data
 def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, binance, symbol):
     signals = generate_signals(y_pred, threshold, stop_loss, take_profit)
     balance = float(binance.get_asset_balance(asset='USDT')['free'])
@@ -311,7 +324,7 @@ def validate_email(email):
 def on_click():
     # Do some work that takes a few seconds.
     for i in range(10):
-        time.sleep(5)
+        time.sleep(0.1)
         st.progress(i / 10)
 
     # Show a message saying that the work is done.
@@ -534,8 +547,11 @@ def main():
             # Afficher les valeurs sélectionnées
             st.write(new_valeur_min_take_profit)
             st.write(new_valeur_max_take_profit)
+
         st_param_trad = st.button ('Start Trading !!!')
         st.write(st_param_trad)
+
+
         if st_param_trad :
             st.write("OK !")
             trading_param_space = {
@@ -559,9 +575,6 @@ def main():
         else:
             st.write('NOPE')
         
-    else:
-        st.write('Ciao')
-
 
 if __name__ == '__main__':
     main()
