@@ -61,8 +61,8 @@ def initialize_binance(api_key, api_secret):
 
 
 @st.cache_resource
-def fetch_data(binance):
-    klines = binance.get_historical_klines("ETHUSDT", Client.KLINE_INTERVAL_1MINUTE, "1000 minute ago UTC")  ### editable parameters
+def fetch_data(_binance):
+    klines = _binance.get_historical_klines("ETHUSDT", Client.KLINE_INTERVAL_1MINUTE, "1000 minute ago UTC")  ### editable parameters
     data = pd.DataFrame(klines, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume', 'close_time', 'quote_asset_volume', 'number_of_trades', 'taker_buy_base_asset_volume', 'taker_buy_quote_asset_volume', 'ignore'])
     data['timestamp'] = pd.to_datetime(data['timestamp'], unit='ms')
     data['price_change'] = data['close'].astype(float) - data['open'].astype(float)
