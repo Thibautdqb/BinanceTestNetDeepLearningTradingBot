@@ -332,7 +332,7 @@ def main():
         binance = initialize_binance(api_key, api_secret)
         st.title("Formulaire d'adresse e-mail")
         
-        email_streamlit = st.text_input("Entrez votre adresse e-mail", key=1)
+        email_streamlit = st.text_input("Entrez votre adresse e-mail", key="email_streamlit")
         if st.button("Valider"):
             if validate_email(email_streamlit):
                 st.success("Adresse e-mail valide !")
@@ -349,7 +349,7 @@ def main():
             valeur_min_learning_rate= 0.001
             valeur_max_learning_rate = 0.01
             # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_learning_rate = st.slider("Learning rate", valeur_min_learning_rate, valeur_max_learning_rate, (valeur_min_learning_rate, valeur_max_learning_rate), step=0.001, key=2)
+            valeurs_learning_rate = st.slider("Learning rate", valeur_min_learning_rate, valeur_max_learning_rate, (valeur_min_learning_rate, valeur_max_learning_rate), step=0.001, key="2")
 
             # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
             new_valeur_min_learning_rate = valeurs_learning_rate[0]
