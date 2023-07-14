@@ -484,79 +484,79 @@ def main():
         with st.expander("Ensemble de test"):
             st.dataframe(test.style.set_properties(**{'background-color': 'lightyellow', 'color': 'black'}))
 
-            
-        X_train, y_train, X_val, y_val, X_test, y_test = load_csv_data()
-        X_train, X_val, X_test = reshape_data(X_train, X_val, X_test)
-        param_space = {
-            'learning_rate': hp.uniform('learning_rate', new_valeur_min_learning_rate, new_valeur_max_learning_rate),
-            'batch_size': hp.uniform('batch_size',new_valeur_min_batch_size, new_valeur_max_batch_size),
-            'epochs': hp.uniform('epochs',new_valeur_min_epochs, new_valeur_max_epochs),
-            'l2': hp.loguniform('l2', -10, -4),
-            'optimizer': hp.choice('optimizer', optimizer),            
-            'units': hp.uniform('units', new_valeur_min_units, new_valeur_max_units),
-            'unit': hp.uniform('unit', new_valeur_min_unit, new_valeur_max_unit),
-            'dropout': hp.uniform('dropout', new_valeur_min_dropout, new_valeur_max_dropout),
-        }
-        trials = Trials()
-        best = fmin(lambda p: objective(p, X_train, y_train, X_val, y_val), param_space, algo=tpe.suggest, max_evals=1, trials=trials)
-        best['optimizer'] = optimizer[best['optimizer']]
-        print("Best hyperparameters:", best)
-        model = create_model(best)
-        history = model.fit(X_train, y_train, batch_size=int(best['batch_size']), epochs=int(best['epochs']), validation_data=(X_val, y_val))
-        train_loss = history.history['loss']
-        val_loss = history.history['val_loss']
-        print("Train loss",train_loss)
-        print("Validation loss",val_loss)
-        y_pred = model.predict(X_test)
-        corr = np.corrcoef(y_test, y_pred.flatten())[0][1]
-        print("Final model correlation:", corr)
-        mse = mean_squared_error(y_test, y_pred)
-        print("Mean squared error:", mse)
-        mae = mean_absolute_error(y_test, y_pred)
-        print("Mean absolute error:", mae)
-        rmse = np.sqrt(mse)
-        print("Root mean squared error:", rmse)
-        r2 = r2_score(y_test, y_pred)
-        print("R-squared score:", r2)
-        errors = np.abs(y_test - y_pred)
-        # Histogramme des erreurs
-        import matplotlib.pyplot as plt
-        import streamlit as st
-        # Histogramme de Répartition des erreurs
-        st.subheader("Histogramme de Répartition des erreurs")
-        fig_hist = plt.figure()
-        plt.hist(errors, bins=50)
-        plt.xlabel('Erreur')
-        plt.ylabel("Nombre d'occurrences")
-        plt.title('Histogramme de Répartition des erreurs')
-        st.pyplot(fig_hist)
-        # Graphique des prédictions
-        st.subheader("Graphique des Prédictions")
-        fig_pred = plt.figure()
-        plt.plot(y_test, label='Données de test')
-        plt.plot(y_pred, label='Prédictions')
-        plt.title('Graphique des Prédictions')
-        plt.legend()
-        st.pyplot(fig_pred)
-        
-        trading_param_space = {
-                    'threshold': hp.uniform('threshold', new_valeur_min_thresold, new_valeur_max_thresold),         
-                    'stop_loss': hp.uniform('stop_loss', new_valeur_min_stop_loss, new_valeur_max_stop_loss),      
-                    'take_profit': hp.uniform('take_profit', new_valeur_min_take_profit, new_valeur_max_take_profit)}  
-        symbol='ETHUSDT'
-        trading_trials = Trials()
-        trading_best = fmin(lambda p: trading_objective(p, y_test, y_pred, binance, symbol), trading_param_space, algo=tpe.suggest, max_evals=200, trials=trading_trials, verbose=1)
-        print("Best trading parameters : ", trading_best)
-        solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
-        subject = "Model performance report"
-        body = "Final balance: {:.2f}".format(solde_final)
-        to_email = email_streamlit
-        from_email = os.environ.get("FROMEMAIL")
-        password = os.environ.get("EMAILPASSWORD") 
-        if send_email(subject, body, mse, corr, best, to_email, from_email, password):
-            print("E-mail sent with success")
-        else:
-            print("E-mail failed to be sent")
+
+    X_train, y_train, X_val, y_val, X_test, y_test = load_csv_data()
+    X_train, X_val, X_test = reshape_data(X_train, X_val, X_test)
+    param_space = {
+        'learning_rate': hp.uniform('learning_rate', new_valeur_min_learning_rate, new_valeur_max_learning_rate),
+        'batch_size': hp.uniform('batch_size',new_valeur_min_batch_size, new_valeur_max_batch_size),
+        'epochs': hp.uniform('epochs',new_valeur_min_epochs, new_valeur_max_epochs),
+        'l2': hp.loguniform('l2', -10, -4),
+        'optimizer': hp.choice('optimizer', optimizer),            
+        'units': hp.uniform('units', new_valeur_min_units, new_valeur_max_units),
+        'unit': hp.uniform('unit', new_valeur_min_unit, new_valeur_max_unit),
+        'dropout': hp.uniform('dropout', new_valeur_min_dropout, new_valeur_max_dropout),
+    }
+    trials = Trials()
+    best = fmin(lambda p: objective(p, X_train, y_train, X_val, y_val), param_space, algo=tpe.suggest, max_evals=1, trials=trials)
+    best['optimizer'] = optimizer[best['optimizer']]
+    print("Best hyperparameters:", best)
+    model = create_model(best)
+    history = model.fit(X_train, y_train, batch_size=int(best['batch_size']), epochs=int(best['epochs']), validation_data=(X_val, y_val))
+    train_loss = history.history['loss']
+    val_loss = history.history['val_loss']
+    print("Train loss",train_loss)
+    print("Validation loss",val_loss)
+    y_pred = model.predict(X_test)
+    corr = np.corrcoef(y_test, y_pred.flatten())[0][1]
+    print("Final model correlation:", corr)
+    mse = mean_squared_error(y_test, y_pred)
+    print("Mean squared error:", mse)
+    mae = mean_absolute_error(y_test, y_pred)
+    print("Mean absolute error:", mae)
+    rmse = np.sqrt(mse)
+    print("Root mean squared error:", rmse)
+    r2 = r2_score(y_test, y_pred)
+    print("R-squared score:", r2)
+    errors = np.abs(y_test - y_pred)
+    # Histogramme des erreurs
+    import matplotlib.pyplot as plt
+    import streamlit as st
+    # Histogramme de Répartition des erreurs
+    st.subheader("Histogramme de Répartition des erreurs")
+    fig_hist = plt.figure()
+    plt.hist(errors, bins=50)
+    plt.xlabel('Erreur')
+    plt.ylabel("Nombre d'occurrences")
+    plt.title('Histogramme de Répartition des erreurs')
+    st.pyplot(fig_hist)
+    # Graphique des prédictions
+    st.subheader("Graphique des Prédictions")
+    fig_pred = plt.figure()
+    plt.plot(y_test, label='Données de test')
+    plt.plot(y_pred, label='Prédictions')
+    plt.title('Graphique des Prédictions')
+    plt.legend()
+    st.pyplot(fig_pred)
+    
+    trading_param_space = {
+                'threshold': hp.uniform('threshold', new_valeur_min_thresold, new_valeur_max_thresold),         
+                'stop_loss': hp.uniform('stop_loss', new_valeur_min_stop_loss, new_valeur_max_stop_loss),      
+                'take_profit': hp.uniform('take_profit', new_valeur_min_take_profit, new_valeur_max_take_profit)}  
+    symbol='ETHUSDT'
+    trading_trials = Trials()
+    trading_best = fmin(lambda p: trading_objective(p, y_test, y_pred, binance, symbol), trading_param_space, algo=tpe.suggest, max_evals=200, trials=trading_trials, verbose=1)
+    print("Best trading parameters : ", trading_best)
+    solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
+    subject = "Model performance report"
+    body = "Final balance: {:.2f}".format(solde_final)
+    to_email = email_streamlit
+    from_email = os.environ.get("FROMEMAIL")
+    password = os.environ.get("EMAILPASSWORD") 
+    if send_email(subject, body, mse, corr, best, to_email, from_email, password):
+        print("E-mail sent with success")
+    else:
+        print("E-mail failed to be sent")
 
         
 
