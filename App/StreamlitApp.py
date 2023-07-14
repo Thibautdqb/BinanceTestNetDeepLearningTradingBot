@@ -518,26 +518,6 @@ def main():
         r2 = r2_score(y_test, y_pred)
         print("R-squared score:", r2)
         errors = np.abs(y_test - y_pred)
-        # Histogramme des erreurs
-        import matplotlib.pyplot as plt
-        import streamlit as st
-        # Histogramme de Répartition des erreurs
-        st.subheader("Histogramme de Répartition des erreurs")
-        fig_hist = plt.figure()
-        plt.hist(errors, bins=50)
-        plt.xlabel('Erreur')
-        plt.ylabel("Nombre d'occurrences")
-        plt.title('Histogramme de Répartition des erreurs')
-        st.pyplot(fig_hist)
-        # Graphique des prédictions
-        st.subheader("Graphique des Prédictions")
-        fig_pred = plt.figure()
-        plt.plot(y_test, label='Données de test')
-        plt.plot(y_pred, label='Prédictions')
-        plt.title('Graphique des Prédictions')
-        plt.legend()
-        st.pyplot(fig_pred)
-        
         trading_param_space = {
                     'threshold': hp.uniform('threshold', new_valeur_min_thresold, new_valeur_max_thresold),         
                     'stop_loss': hp.uniform('stop_loss', new_valeur_min_stop_loss, new_valeur_max_stop_loss),      
@@ -556,6 +536,25 @@ def main():
             print("E-mail sent with success")
         else:
             print("E-mail failed to be sent")
+
+        # Histogramme de Répartition des erreurs
+        st.subheader("Histogramme de Répartition des erreurs")
+        fig_hist = plt.figure()
+        plt.hist(errors, bins=50)
+        plt.xlabel('Erreur')
+        plt.ylabel("Nombre d'occurrences")
+        plt.title('Histogramme de Répartition des erreurs')
+        st.pyplot(fig_hist)
+        # Graphique des prédictions
+        st.subheader("Graphique des Prédictions")
+        fig_pred = plt.figure()
+        plt.plot(y_test, label='Données de test')
+        plt.plot(y_pred, label='Prédictions')
+        plt.title('Graphique des Prédictions')
+        plt.legend()
+        st.pyplot(fig_pred)
+        
+
 
         
 
