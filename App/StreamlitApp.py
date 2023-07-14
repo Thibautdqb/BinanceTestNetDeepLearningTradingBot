@@ -109,6 +109,7 @@ def reshape_data(X_train, X_val, X_test):
 
 
 ####Editable model structure
+@st.cache_resource
 def create_model(params):
     model = Sequential()
     model.add(LSTM(int(params['units']), input_shape=(1, 2), return_sequences=True))
@@ -117,6 +118,7 @@ def create_model(params):
     model.compile(optimizer=Adam(learning_rate=params['learning_rate']), loss='mse') ### editable parameters(for instance mea...)
     return model
 
+@st.cache_resource
 
 def objective(params, X_train, y_train, X_val, y_val):
     model = create_model(params)
@@ -127,6 +129,7 @@ def objective(params, X_train, y_train, X_val, y_val):
     print("MSE: {:.5f} | Correlation: {:.5f}".format(val_loss, corr))
     return {'loss': val_loss, 'status': STATUS_OK}
 
+@st.cache_resource
 
 def calculate_return(entry_price, exit_price, position):
     if position == 1: # Long position
@@ -138,6 +141,7 @@ def calculate_return(entry_price, exit_price, position):
 
 
 
+@st.cache_resource
 
 def generate_signals(y_pred, threshold, stop_loss, take_profit):
     signals = []
@@ -153,6 +157,7 @@ def generate_signals(y_pred, threshold, stop_loss, take_profit):
             signals.append((0, None, None))
     return signals
 
+@st.cache_resource
 
 def trading_objective(params, y_test, y_pred, binance, symbol):
     threshold = params['threshold']
@@ -186,6 +191,7 @@ def trading_objective(params, y_test, y_pred, binance, symbol):
 
     return {'loss': -cumulative_return, 'status': STATUS_OK}
 
+@st.cache_resource
 
 def place_order(binance, symbol, side, quantity):
     try:
@@ -201,6 +207,7 @@ def place_order(binance, symbol, side, quantity):
     except BinanceOrderException as e:
         print(f"Binance Order Exception: {e}")
         return False
+@st.cache_resource
 
 def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, binance, symbol):
     signals = generate_signals(y_pred, threshold, stop_loss, take_profit)
@@ -265,6 +272,7 @@ def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, 
 
 
 
+@st.cache_resource
 
 def plot_trades(y_test, trade_data):
     plt.figure(figsize=(20, 10))
@@ -276,6 +284,7 @@ def plot_trades(y_test, trade_data):
         elif trade_type == "sell":
             plt.scatter(index, price, c="red", label="sell" if index == 0 else None)
     plt.legend()
+@st.cache_resource
 
 def send_email(subject, body, mse, corr, best_hyperparams, to_email, from_email, password):
     body = f"{body}\nMean squared error: {mse}\nCorrelation: {corr}\nBest hyperparameters: {best_hyperparams}"
@@ -299,6 +308,7 @@ def send_email(subject, body, mse, corr, best_hyperparams, to_email, from_email,
 
 
 
+@st.cache_resource
 
 def validate_email(email):
     # Vérifie si l'adresse e-mail est valide
@@ -307,6 +317,7 @@ def validate_email(email):
         return True
     return False
 
+@st.cache_resource
 
 def on_click():
     # Do some work that takes a few seconds.
@@ -316,7 +327,6 @@ def on_click():
 
     # Show a message saying that the work is done.
     st.write('The work is done!')
-
 
 
 def main():
