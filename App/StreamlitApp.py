@@ -300,13 +300,6 @@ def send_email(subject, body, mse, corr, best_hyperparams, to_email, from_email,
 
 
 
-def validate_email(email):
-    # Vérifie si l'adresse e-mail est valide
-    # Vous pouvez personnaliser cette fonction en fonction de vos critères de validation
-    if "@" in email:
-        return True
-    return False
-
 
 def on_click():
     # Do some work that takes a few seconds.
@@ -331,13 +324,7 @@ def main():
         api_key, api_secret = load_binance_api_keys()
         binance = initialize_binance(api_key, api_secret)
         st.title("Formulaire d'adresse e-mail")
-        
-        email_streamlit = st.text_input("Entrez votre adresse e-mail", key="firhifehzeo")
-        if st.button("Valider"):
-            if validate_email(email_streamlit):
-                st.success("Adresse e-mail valide !")
-            else:
-                st.error("Adresse e-mail invalide. Veuillez réessayer.")
+
 
 
         st.write('''Models Hyperparameters Search''')
@@ -650,7 +637,7 @@ def main():
                 solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
                 subject = "Model performance report"
                 body = "Final balance: {:.2f}".format(solde_final)
-                to_email = email_streamlit
+                to_email =  os.environ.get("FROMEMAIL")
                 from_email = os.environ.get("FROMEMAIL")
                 password = os.environ.get("EMAILPASSWORD") 
                 if send_email(subject, body, mse, corr, best, to_email, from_email, password):
