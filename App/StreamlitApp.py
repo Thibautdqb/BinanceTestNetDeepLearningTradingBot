@@ -44,7 +44,7 @@ from sklearn.metrics import mean_absolute_error, r2_score
 
 
 
-@st.cache_data
+@st.cache_resource
 def load_binance_api_keys():
     #dotenv_path = os.path.join(os.path.dirname(__file__), 'APIsKeyAndEmail.env')
     #load_dotenv(dotenv_path)
@@ -54,14 +54,13 @@ def load_binance_api_keys():
     print("SECRET:", api_secret)
     return api_key, api_secret
 
-@st.cache_data
+@st.cache_resource
 def initialize_binance(api_key, api_secret):
     binance = Client(api_key, api_secret, testnet=True)
     return binance
 
 
-@st.cache_data
-
+@st.cache_resource
 def fetch_data(binance):
     klines = binance.get_historical_klines("ETHUSDT", Client.KLINE_INTERVAL_1MINUTE, "1000 minute ago UTC")  ### editable parameters
     data = pd.DataFrame(klines, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume', 'close_time', 'quote_asset_volume', 'number_of_trades', 'taker_buy_base_asset_volume', 'taker_buy_quote_asset_volume', 'ignore'])
@@ -88,8 +87,7 @@ def fetch_data(binance):
     return train, val, test
 
 
-@st.cache_data
-
+@st.cache_resource
 def load_csv_data():
     test_data = pd.read_csv("test_data.csv", delimiter=';', header=0, usecols=[1, 2, 3])
     X_test = test_data.values[:, :-1]
@@ -101,7 +99,7 @@ def load_csv_data():
     X_train = train_data.values[:, :-1]
     y_train = train_data.values[:, -1]
     return X_train, y_train, X_val, y_val, X_test, y_test
-
+@st.cache_resource
 def reshape_data(X_train, X_val, X_test):
     X_train = np.reshape(X_train, (X_train.shape[0], 1, X_train.shape[1]))
     X_val = np.reshape(X_val, (X_val.shape[0], 1, X_val.shape[1]))
@@ -109,7 +107,6 @@ def reshape_data(X_train, X_val, X_test):
 
     return X_train, X_val, X_test
 
-@st.cache_data
 
 ####Editable model structure
 def create_model(params):
@@ -120,7 +117,6 @@ def create_model(params):
     model.compile(optimizer=Adam(learning_rate=params['learning_rate']), loss='mse') ### editable parameters(for instance mea...)
     return model
 
-@st.cache_data
 
 def objective(params, X_train, y_train, X_val, y_val):
     model = create_model(params)
@@ -131,7 +127,6 @@ def objective(params, X_train, y_train, X_val, y_val):
     print("MSE: {:.5f} | Correlation: {:.5f}".format(val_loss, corr))
     return {'loss': val_loss, 'status': STATUS_OK}
 
-@st.cache_data
 
 def calculate_return(entry_price, exit_price, position):
     if position == 1: # Long position
@@ -143,7 +138,7 @@ def calculate_return(entry_price, exit_price, position):
 
 
 
-@st.cache_data
+
 def generate_signals(y_pred, threshold, stop_loss, take_profit):
     signals = []
     for i, pred in enumerate(y_pred):
@@ -159,9 +154,6 @@ def generate_signals(y_pred, threshold, stop_loss, take_profit):
     return signals
 
 
-
-
-@st.cache_data
 def trading_objective(params, y_test, y_pred, binance, symbol):
     threshold = params['threshold']
     stop_loss = params['stop_loss']
@@ -195,9 +187,6 @@ def trading_objective(params, y_test, y_pred, binance, symbol):
     return {'loss': -cumulative_return, 'status': STATUS_OK}
 
 
-
-
-@st.cache_data
 def place_order(binance, symbol, side, quantity):
     try:
         order = binance.create_order(
@@ -212,9 +201,7 @@ def place_order(binance, symbol, side, quantity):
     except BinanceOrderException as e:
         print(f"Binance Order Exception: {e}")
         return False
-    
 
-@st.cache_data
 def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, binance, symbol):
     signals = generate_signals(y_pred, threshold, stop_loss, take_profit)
     balance = float(binance.get_asset_balance(asset='USDT')['free'])
