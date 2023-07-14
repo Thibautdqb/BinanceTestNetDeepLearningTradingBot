@@ -332,7 +332,9 @@ def main():
         binance = initialize_binance(api_key, api_secret)
         st.title("Formulaire d'adresse e-mail")
         
-        email_streamlit = st.text_input("Entrez votre adresse e-mail", key=f"email_input_{email_streamlit}" )
+        email_streamlit_key = st.empty()
+        email_streamlit = email_streamlit_key.text_input("Entrez votre adresse e-mail", key="email_input")
+
         if st.button("Valider"):
             if validate_email(email_streamlit):
                 st.success("Adresse e-mail valide !")
