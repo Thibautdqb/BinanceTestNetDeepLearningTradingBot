@@ -44,7 +44,7 @@ from sklearn.metrics import mean_absolute_error, r2_score
 
 
 
-@st.cache_resource
+
 def load_binance_api_keys():
     #dotenv_path = os.path.join(os.path.dirname(__file__), 'APIsKeyAndEmail.env')
     #load_dotenv(dotenv_path)
@@ -54,15 +54,15 @@ def load_binance_api_keys():
     print("SECRET:", api_secret)
     return api_key, api_secret
 
-@st.cache_resource
+
 def initialize_binance(api_key, api_secret):
     binance = Client(api_key, api_secret, testnet=True)
     return binance
 
 
-@st.cache_resource
-def fetch_data(_binance):
-    klines = _binance.get_historical_klines("ETHUSDT", Client.KLINE_INTERVAL_1MINUTE, "1000 minute ago UTC")  ### editable parameters
+
+def fetch_data(binance):
+    klines = binance.get_historical_klines("ETHUSDT", Client.KLINE_INTERVAL_1MINUTE, "1000 minute ago UTC")  ### editable parameters
     data = pd.DataFrame(klines, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume', 'close_time', 'quote_asset_volume', 'number_of_trades', 'taker_buy_base_asset_volume', 'taker_buy_quote_asset_volume', 'ignore'])
     data['timestamp'] = pd.to_datetime(data['timestamp'], unit='ms')
     data['price_change'] = data['close'].astype(float) - data['open'].astype(float)
@@ -87,7 +87,7 @@ def fetch_data(_binance):
     return train, val, test
 
 
-@st.cache_resource
+
 def load_csv_data():
     test_data = pd.read_csv("test_data.csv", delimiter=';', header=0, usecols=[1, 2, 3])
     X_test = test_data.values[:, :-1]
@@ -99,7 +99,7 @@ def load_csv_data():
     X_train = train_data.values[:, :-1]
     y_train = train_data.values[:, -1]
     return X_train, y_train, X_val, y_val, X_test, y_test
-@st.cache_resource
+
 def reshape_data(X_train, X_val, X_test):
     X_train = np.reshape(X_train, (X_train.shape[0], 1, X_train.shape[1]))
     X_val = np.reshape(X_val, (X_val.shape[0], 1, X_val.shape[1]))
@@ -109,7 +109,6 @@ def reshape_data(X_train, X_val, X_test):
 
 
 ####Editable model structure
-@st.cache_resource
 def create_model(params):
     model = Sequential()
     model.add(LSTM(int(params['units']), input_shape=(1, 2), return_sequences=True))
@@ -118,7 +117,6 @@ def create_model(params):
     model.compile(optimizer=Adam(learning_rate=params['learning_rate']), loss='mse') ### editable parameters(for instance mea...)
     return model
 
-@st.cache_resource
 
 def objective(params, X_train, y_train, X_val, y_val):
     model = create_model(params)
@@ -129,7 +127,6 @@ def objective(params, X_train, y_train, X_val, y_val):
     print("MSE: {:.5f} | Correlation: {:.5f}".format(val_loss, corr))
     return {'loss': val_loss, 'status': STATUS_OK}
 
-@st.cache_resource
 
 def calculate_return(entry_price, exit_price, position):
     if position == 1: # Long position
@@ -141,7 +138,6 @@ def calculate_return(entry_price, exit_price, position):
 
 
 
-@st.cache_resource
 
 def generate_signals(y_pred, threshold, stop_loss, take_profit):
     signals = []
@@ -157,7 +153,6 @@ def generate_signals(y_pred, threshold, stop_loss, take_profit):
             signals.append((0, None, None))
     return signals
 
-@st.cache_resource
 
 def trading_objective(params, y_test, y_pred, binance, symbol):
     threshold = params['threshold']
@@ -191,7 +186,6 @@ def trading_objective(params, y_test, y_pred, binance, symbol):
 
     return {'loss': -cumulative_return, 'status': STATUS_OK}
 
-@st.cache_resource
 
 def place_order(binance, symbol, side, quantity):
     try:
@@ -207,7 +201,6 @@ def place_order(binance, symbol, side, quantity):
     except BinanceOrderException as e:
         print(f"Binance Order Exception: {e}")
         return False
-@st.cache_resource
 
 def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, binance, symbol):
     signals = generate_signals(y_pred, threshold, stop_loss, take_profit)
@@ -272,7 +265,6 @@ def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, 
 
 
 
-@st.cache_resource
 
 def plot_trades(y_test, trade_data):
     plt.figure(figsize=(20, 10))
@@ -284,7 +276,6 @@ def plot_trades(y_test, trade_data):
         elif trade_type == "sell":
             plt.scatter(index, price, c="red", label="sell" if index == 0 else None)
     plt.legend()
-@st.cache_resource
 
 def send_email(subject, body, mse, corr, best_hyperparams, to_email, from_email, password):
     body = f"{body}\nMean squared error: {mse}\nCorrelation: {corr}\nBest hyperparameters: {best_hyperparams}"
@@ -308,7 +299,6 @@ def send_email(subject, body, mse, corr, best_hyperparams, to_email, from_email,
 
 
 
-@st.cache_resource
 
 def validate_email(email):
     # Vérifie si l'adresse e-mail est valide
@@ -317,7 +307,6 @@ def validate_email(email):
         return True
     return False
 
-@st.cache_resource
 
 def on_click():
     # Do some work that takes a few seconds.
@@ -327,6 +316,7 @@ def on_click():
 
     # Show a message saying that the work is done.
     st.write('The work is done!')
+
 
 
 def main():
@@ -442,21 +432,57 @@ def main():
         st.write(new_valeur_min_dropout)
         st.write(new_valeur_max_dropout)
     
+
+    col_thresold, col_stop_loss, col_take_profit = st.columns(3)
+    with col_thresold:
+        valeur_min_thresold= 32
+        valeur_max_thresold = 512
+        # Utiliser le widget slider avec les valeurs minimale et maximale
+        valeurs_thresold = st.slider("Thresold value", valeur_min_thresold, valeur_max_thresold, (valeur_min_thresold, valeur_max_thresold), step=1, key=9)
+        # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+        new_valeur_min_thresold = valeurs_thresold[0]
+        new_valeur_max_thresold = valeurs_thresold[1]
+        # Afficher les valeurs sélectionnées
+        st.write(new_valeur_min_thresold)
+        st.write(new_valeur_max_thresold)
+    with col_stop_loss:
+        valeur_min_stop_loss= 32
+        valeur_max_stop_loss = 512
+        # Utiliser le widget slider avec les valeurs minimale et maximale
+        valeurs_stop_loss = st.slider("Stop Loss Value", valeur_min_stop_loss, valeur_max_stop_loss, (valeur_min_stop_loss, valeur_max_stop_loss), step=1, key=10)
+        # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+        new_valeur_min_stop_loss = valeurs_stop_loss[0]
+        new_valeur_max_stop_loss = valeurs_stop_loss[1]
+        # Afficher les valeurs sélectionnées
+        st.write(new_valeur_min_stop_loss)
+        st.write(new_valeur_max_stop_loss)
+    with col_take_profit:
+        valeur_min_take_profit= 32
+        valeur_max_take_profit = 512
+        # Utiliser le widget slider avec les valeurs minimale et maximale
+        valeurs_take_profit = st.slider("Take profit value", valeur_min_take_profit, valeur_max_take_profit, (valeur_min_take_profit, valeur_max_take_profit), step=1, key=11)
+        # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+        new_valeur_min_take_profit = valeurs_take_profit[0]
+        new_valeur_max_take_profit = valeurs_take_profit[1]
+        # Afficher les valeurs sélectionnées
+        st.write(new_valeur_min_take_profit)
+        st.write(new_valeur_max_take_profit)
+
     st_param_model = st.button ('Start Magic', on_click=on_click)
     if st_param_model :
         st.write("Le bouton a été cliqué !")
-        train, val, test = fetch_data(binance)
-        # Créer deux colonnes pour afficher les ensembles de données
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            with st.expander("Ensemble de formation"):
-                st.dataframe(train.style.set_properties(**{'background-color': 'lightblue', 'color': 'black'}))
-        with col2:
-            with st.expander("Ensemble de validation"):
-                st.dataframe(val.style.set_properties(**{'background-color': 'lightgreen', 'color': 'black'}))
-        with col3:
-            with st.expander("Ensemble de test"):
-                st.dataframe(test.style.set_properties(**{'background-color': 'lightyellow', 'color': 'black'}))
+    train, val, test = fetch_data(binance)
+    # Créer deux colonnes pour afficher les ensembles de données
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        with st.expander("Ensemble de formation"):
+            st.dataframe(train.style.set_properties(**{'background-color': 'lightblue', 'color': 'black'}))
+    with col2:
+        with st.expander("Ensemble de validation"):
+            st.dataframe(val.style.set_properties(**{'background-color': 'lightgreen', 'color': 'black'}))
+    with col3:
+        with st.expander("Ensemble de test"):
+            st.dataframe(test.style.set_properties(**{'background-color': 'lightyellow', 'color': 'black'}))
         X_train, y_train, X_val, y_val, X_test, y_test = load_csv_data()
         X_train, X_val, X_test = reshape_data(X_train, X_val, X_test)
         param_space = {
@@ -545,12 +571,7 @@ def main():
             st.write(new_valeur_min_take_profit)
             st.write(new_valeur_max_take_profit)
 
-        st_param_trad = st.button ('Start Trading !!!')
-        st.write(st_param_trad)
 
-
-        if st_param_trad :
-            st.write("OK !")
             trading_param_space = {
                         'threshold': hp.uniform('threshold', new_valeur_min_thresold, new_valeur_max_thresold),         
                         'stop_loss': hp.uniform('stop_loss', new_valeur_min_stop_loss, new_valeur_max_stop_loss),      
@@ -569,8 +590,7 @@ def main():
                 print("E-mail sent with success")
             else:
                 print("E-mail failed to be sent")
-        else:
-            st.write('NOPE')
+
         
 
 if __name__ == '__main__':
