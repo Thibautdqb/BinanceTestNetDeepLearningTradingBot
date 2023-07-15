@@ -309,14 +309,7 @@ def validate_email(email):
     return False
 
 
-def on_click():
-    # Do some work that takes a few seconds.
-    for i in range(10):
-        time.sleep(0.1)
-        st.progress(i / 10)
 
-    # Show a message saying that the work is done.
-    st.write('The work is done!')
 
 
 
@@ -469,7 +462,7 @@ def main():
         st.write(new_valeur_min_take_profit)
         st.write(new_valeur_max_take_profit)
 
-    st_param_model = st.button ('Start Magic', on_click=on_click)
+    st_param_model = st.button ('Start Magic')
     if st_param_model :
         st.write("Le bouton a été cliqué !")
         train, val, test = fetch_data(binance)
