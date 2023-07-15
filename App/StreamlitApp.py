@@ -491,7 +491,6 @@ def main():
             'dropout': hp.uniform('dropout', new_valeur_min_dropout, new_valeur_max_dropout),
         }
         trials = Trials()
-        progress_bar = st.progress(0)
         max_evals = 10
         for i in range(1, max_evals + 1):
             best = fmin(
@@ -502,8 +501,8 @@ def main():
                 trials=trials,
                 verbose = True,
         )
-            progress_bar.progress(i / max_evals)
-
+        progress_bar = st.progress(i / max_evals)
+        progress_bar
 
         best['optimizer'] = optimizer[best['optimizer']]
         print("Best hyperparameters:", best)
@@ -511,23 +510,16 @@ def main():
         history = model.fit(X_train, y_train, batch_size=int(best['batch_size']), epochs=int(best['epochs']), validation_data=(X_val, y_val))
         train_loss = history.history['loss']
         val_loss = history.history['val_loss']
-        print("Train loss",train_loss)
-        print("Validation loss",val_loss)
+
         y_pred = model.predict(X_test)
         corr = np.corrcoef(y_test, y_pred.flatten())[0][1]
-        print("Final model correlation:", corr)
         mse = mean_squared_error(y_test, y_pred)
-        print("Mean squared error:", mse)
         mae = mean_absolute_error(y_test, y_pred)
-        print("Mean absolute error:", mae)
         rmse = np.sqrt(mse)
-        print("Root mean squared error:", rmse)
         r2 = r2_score(y_test, y_pred)
-        print("R-squared score:", r2)
         errors = np.abs(y_test - y_pred)
         # Histogramme des erreurs
 
-        
         # Histogramme de Répartition des erreurs
         st.subheader("Histogramme de Répartition des erreurs")
         fig_hist = plt.figure()
@@ -564,7 +556,6 @@ def main():
         else:
             print("E-mail failed to be sent")
 
-        
 
 if __name__ == '__main__':
     main()
