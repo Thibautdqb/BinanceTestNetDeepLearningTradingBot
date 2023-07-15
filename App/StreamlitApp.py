@@ -462,80 +462,88 @@ def main():
         st.write(new_valeur_min_take_profit)
         st.write(new_valeur_max_take_profit)
 
-    st_param_model = st.button ('Start Magic')
-    if st_param_model :
-        st.write("Le bouton a été cliqué !")
-        train, val, test = fetch_data(binance)
-        # Créer deux colonnes pour afficher les ensembles de données
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            with st.expander("Ensemble de formation"):
-                st.dataframe(train.style.set_properties(**{'background-color': 'lightblue', 'color': 'black'}))
-        with col2:
-            with st.expander("Ensemble de validation"):
-                st.dataframe(val.style.set_properties(**{'background-color': 'lightgreen', 'color': 'black'}))
-        with col3:
-            with st.expander("Ensemble de test"):
-                st.dataframe(test.style.set_properties(**{'background-color': 'lightyellow', 'color': 'black'}))
-            
-        X_train, y_train, X_val, y_val, X_test, y_test = load_csv_data()
-        X_train, X_val, X_test = reshape_data(X_train, X_val, X_test)
-        param_space = {
-            'learning_rate': hp.uniform('learning_rate', new_valeur_min_learning_rate, new_valeur_max_learning_rate),
-            'batch_size': hp.uniform('batch_size',new_valeur_min_batch_size, new_valeur_max_batch_size),
-            'epochs': hp.uniform('epochs',new_valeur_min_epochs, new_valeur_max_epochs),
-            'l2': hp.loguniform('l2', -10, 0),
-            'optimizer': hp.choice('optimizer', optimizer),            
-            'units': hp.uniform('units', new_valeur_min_units, new_valeur_max_units),
-            'unit': hp.uniform('unit', new_valeur_min_unit, new_valeur_max_unit),
-            'dropout': hp.uniform('dropout', new_valeur_min_dropout, new_valeur_max_dropout),
-        }
-        trials = Trials()
-        max_evals = 10
-        for i in range(1, max_evals + 1):
-            best = fmin(
-                fn=lambda p: objective(p, X_train, y_train, X_val, y_val),
-                space=param_space,
-                algo=tpe.suggest,
-                max_evals=i,
-                trials=trials,
-                verbose = 1,
-        )
-            progress_bar = st.progress(i / max_evals)
-            st.text(f"Iteration{i}/{max_evals}")
 
-        best['optimizer'] = optimizer[best['optimizer']]
-        st.text("Utilisation du meilleurs model trouvé")
-        print("Best hyperparameters:", best)
-        model = create_model(best)
-        history = model.fit(X_train, y_train, batch_size=int(best['batch_size']), epochs=int(best['epochs']), validation_data=(X_val, y_val))
-        y_pred = model.predict(X_test)
-        corr = np.corrcoef(y_test, y_pred.flatten())[0][1]
-        mse = mean_squared_error(y_test, y_pred)
-        mae = mean_absolute_error(y_test, y_pred)
-        rmse = np.sqrt(mse)
-        r2 = r2_score(y_test, y_pred)
-        errors = np.abs(y_test - y_pred)
 
-        
-        trading_param_space = {
-                    'threshold': hp.uniform('threshold', new_valeur_min_thresold, new_valeur_max_thresold),         
-                    'stop_loss': hp.uniform('stop_loss', new_valeur_min_stop_loss, new_valeur_max_stop_loss),      
-                    'take_profit': hp.uniform('take_profit', new_valeur_min_take_profit, new_valeur_max_take_profit)}  
-        symbol='ETHUSDT'
-        trading_trials = Trials()
-        trading_best = fmin(lambda p: trading_objective(p, y_test, y_pred, binance, symbol), trading_param_space, algo=tpe.suggest, max_evals=200, trials=trading_trials, verbose=1)
-        st.text("Best trading parameters : ", trading_best)
-        solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
-        subject = "Model performance report"
-        body = "Final balance: {:.2f}".format(solde_final)
-        to_email = email_streamlit
-        from_email = os.environ.get("FROMEMAIL")
-        password = os.environ.get("EMAILPASSWORD") 
-        if send_email(subject, body, mse, corr, best, to_email, from_email, password):
-            print("E-mail sent with success")
-        else:
-            print("E-mail failed to be sent")
+    col_button_1, col_button_2 = st.columns(2)
+    with col_button_1:
+
+        st_param_model = st.button ('Start Magic')
+        if st_param_model :
+            st.write("Le bouton a été cliqué !")
+            train, val, test = fetch_data(binance)
+            # Créer deux colonnes pour afficher les ensembles de données
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                with st.expander("Ensemble de formation"):
+                    st.dataframe(train.style.set_properties(**{'background-color': 'lightblue', 'color': 'black'}))
+            with col2:
+                with st.expander("Ensemble de validation"):
+                    st.dataframe(val.style.set_properties(**{'background-color': 'lightgreen', 'color': 'black'}))
+            with col3:
+                with st.expander("Ensemble de test"):
+                    st.dataframe(test.style.set_properties(**{'background-color': 'lightyellow', 'color': 'black'}))
+
+            X_train, y_train, X_val, y_val, X_test, y_test = load_csv_data()
+            X_train, X_val, X_test = reshape_data(X_train, X_val, X_test)
+            param_space = {
+                'learning_rate': hp.uniform('learning_rate', new_valeur_min_learning_rate, new_valeur_max_learning_rate),
+                'batch_size': hp.uniform('batch_size',new_valeur_min_batch_size, new_valeur_max_batch_size),
+                'epochs': hp.uniform('epochs',new_valeur_min_epochs, new_valeur_max_epochs),
+                'l2': hp.loguniform('l2', -10, 0),
+                'optimizer': hp.choice('optimizer', optimizer),            
+                'units': hp.uniform('units', new_valeur_min_units, new_valeur_max_units),
+                'unit': hp.uniform('unit', new_valeur_min_unit, new_valeur_max_unit),
+                'dropout': hp.uniform('dropout', new_valeur_min_dropout, new_valeur_max_dropout),
+            }
+            trials = Trials()
+            max_evals = 10
+            for i in range(1, max_evals + 1):
+                best = fmin(
+                    fn=lambda p: objective(p, X_train, y_train, X_val, y_val),
+                    space=param_space,
+                    algo=tpe.suggest,
+                    max_evals=i,
+                    trials=trials,
+                    verbose = 1,
+            )
+                progress_bar = st.progress(i / max_evals)
+                st.text(f"Iteration{i}/{max_evals}")
+
+            best['optimizer'] = optimizer[best['optimizer']]
+            st.text("Utilisation du meilleurs model trouvé")
+            print("Best hyperparameters:", best)
+            model = create_model(best)
+            history = model.fit(X_train, y_train, batch_size=int(best['batch_size']), epochs=int(best['epochs']), validation_data=(X_val, y_val))
+            y_pred = model.predict(X_test)
+            corr = np.corrcoef(y_test, y_pred.flatten())[0][1]
+            mse = mean_squared_error(y_test, y_pred)
+            mae = mean_absolute_error(y_test, y_pred)
+            rmse = np.sqrt(mse)
+            r2 = r2_score(y_test, y_pred)
+            errors = np.abs(y_test - y_pred)
+
+
+            trading_param_space = {
+                        'threshold': hp.uniform('threshold', new_valeur_min_thresold, new_valeur_max_thresold),         
+                        'stop_loss': hp.uniform('stop_loss', new_valeur_min_stop_loss, new_valeur_max_stop_loss),      
+                        'take_profit': hp.uniform('take_profit', new_valeur_min_take_profit, new_valeur_max_take_profit)}  
+            symbol='ETHUSDT'
+            trading_trials = Trials()
+            trading_best = fmin(lambda p: trading_objective(p, y_test, y_pred, binance, symbol), trading_param_space, algo=tpe.suggest, max_evals=200, trials=trading_trials, verbose=1)
+            st.text("Best trading parameters : ", trading_best)
+            solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
+            subject = "Model performance report"
+            body = "Final balance: {:.2f}".format(solde_final)
+            to_email = email_streamlit
+            from_email = os.environ.get("FROMEMAIL")
+            password = os.environ.get("EMAILPASSWORD") 
+            if send_email(subject, body, mse, corr, best, to_email, from_email, password):
+                print("E-mail sent with success")
+            else:
+                print("E-mail failed to be sent")
+
+    with col_button_2:
+        st.write('''Define the hyperparameter windows you wish to use to launch the program and click on the "Start the Magic" button''')
 
 
 if __name__ == '__main__':
