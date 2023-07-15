@@ -326,229 +326,219 @@ def main():
     st.title("Formulaire d'adresse e-mail")
     
     email_streamlit_key = st.empty()
+    email_streamlit = email_streamlit_key.text_input("Entrez votre adresse e-mail", key="email_input")
+    if st.button("Valider"):
+        if validate_email(email_streamlit):
+            st.success("Adresse e-mail valide !")
+        else:
+            st.error("Adresse e-mail invalide. Veuillez réessayer.")
+    st.write('''Models Hyperparameters Search''')
     
-    menu_one = st.button ('Hyperparameters description')
-    if menu_one :
-        st.write("Bienvenue")
-        
+    col_slider_1, col_slider_2, col_slider_3, col_slider_4 = st.columns(4)
+    with col_slider_1 :
+        # Définir les valeurs minimale et maximale du slider
+        valeur_min_learning_rate= 0.001
+        valeur_max_learning_rate = 0.01
+        # Utiliser le widget slider avec les valeurs minimale et maximale
+        valeurs_learning_rate = st.slider("Learning rate", valeur_min_learning_rate, valeur_max_learning_rate, (valeur_min_learning_rate, valeur_max_learning_rate), step=0.001, key="2")
+        # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+        new_valeur_min_learning_rate = valeurs_learning_rate[0]
+        new_valeur_max_learning_rate = valeurs_learning_rate[1]
+        # Afficher les valeurs sélectionnées
+        st.write(new_valeur_min_learning_rate)
+        st.write(new_valeur_max_learning_rate)
+    with col_slider_2 : 
+        valeur_min_batch_size= 32
+        valeur_max_batch_size = 512
+        # Utiliser le widget slider avec les valeurs minimale et maximale
+        valeurs_batch_size = st.slider("Batch size", valeur_min_batch_size, valeur_max_batch_size, (valeur_min_batch_size, valeur_max_batch_size), step=1, key=3)
+        # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+        new_valeur_min_batch_size = valeurs_batch_size[0]
+        new_valeur_max_batch_size = valeurs_batch_size[1]
+        # Afficher les valeurs sélectionnées
+        st.write(new_valeur_min_batch_size)
+        st.write(new_valeur_max_batch_size)
+    with col_slider_3 :
+        valeur_min_epochs= 10
+        valeur_max_epochs = 100
+        # Utiliser le widget slider avec les valeurs minimale et maximale
+        valeurs_epochs = st.slider("Epochs", valeur_min_epochs, valeur_max_epochs, (valeur_min_epochs, valeur_max_epochs), step=1, key=4)
+        # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+        new_valeur_min_epochs = valeurs_epochs[0]
+        new_valeur_max_epochs = valeurs_epochs[1]
+        # Afficher les valeurs sélectionnées
+        st.write(new_valeur_min_epochs)
+        st.write(new_valeur_max_epochs)
+    with col_slider_4 :
+        # Définir les valeurs minimale et maximale du slider
+        valeur_min_l2= -10
+        valeur_max_l2 = -4
+        # Utiliser le widget slider avec les valeurs minimale et maximale
+        valeurs_l2 = st.slider("l2", valeur_min_l2, valeur_max_l2, (valeur_min_l2, valeur_max_l2), step=1, key=5)
+        # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+        new_valeur_min_l2 = valeurs_l2[0]
+        new_valeur_max_l2 = valeurs_l2[1]
+        # Afficher les valeurs sélectionnées
+        st.write(new_valeur_min_l2)
+        st.write(new_valeur_max_l2)
+    col_selectbox_5, col_slider_6, col_slider_7, col_slider_8 = st.columns(4)
+    with col_selectbox_5 :
+        optimizer = st.selectbox(
+            'Optimizer',
+            ('Adam','SGD', 'Adamax', 'Adagrad'))
+        st.write(optimizer)
+        #optimizer = st.selectbox('Optimizer', 'adam', 'SGD')
+        #st.write (optimizer)
+    with col_slider_6 : 
+        # Définir les valeurs minimale et maximale du slider
+        valeur_min_units= 32
+        valeur_max_units = 512
+        # Utiliser le widget slider avec les valeurs minimale et maximale
+        valeurs_units = st.slider("Units", valeur_min_units, valeur_max_units, (valeur_min_units, valeur_max_units), step=1, key=6)
+        # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+        new_valeur_min_units = valeurs_units[0]
+        new_valeur_max_units = valeurs_units[1]
+        # Afficher les valeurs sélectionnées
+        st.write(new_valeur_min_units)
+        st.write(new_valeur_max_units)
+    with col_slider_7 : 
+        # Définir les valeurs minimale et maximale du slider
+        valeur_min_unit= 32
+        valeur_max_unit = 512
+        # Utiliser le widget slider avec les valeurs minimale et maximale
+        valeurs_unit = st.slider("Unit", valeur_min_unit, valeur_max_unit, (valeur_min_unit, valeur_max_unit), step=1, key=7)
+        # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+        new_valeur_min_unit = valeurs_unit[0]
+        new_valeur_max_unit = valeurs_unit[1]
+        # Afficher les valeurs sélectionnées
+        st.write(new_valeur_min_unit)
+        st.write(new_valeur_max_unit)
+    with col_slider_8: 
+            # Définir les valeurs minimale et maximale du slider
+        valeur_min_dropout= 0.001
+        valeur_max_dropout = 0.5
+        # Utiliser le widget slider avec les valeurs minimale et maximale
+        valeurs_dropout = st.slider("Dropout", valeur_min_dropout, valeur_max_dropout, (valeur_min_dropout, valeur_max_dropout), step=0.1, key=8 )
+        # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+        new_valeur_min_dropout = valeurs_dropout[0]
+        new_valeur_max_dropout = valeurs_dropout[1]
+        # Afficher les valeurs sélectionnées
+        st.write(new_valeur_min_dropout)
+        st.write(new_valeur_max_dropout)
     
-    menu_two = st.button ('Email Sending')
-    if menu_two:
+
+    col_thresold, col_stop_loss, col_take_profit = st.columns(3)
+    with col_thresold:
+        valeur_min_thresold= 32
+        valeur_max_thresold = 512
+        # Utiliser le widget slider avec les valeurs minimale et maximale
+        valeurs_thresold = st.slider("Thresold value", valeur_min_thresold, valeur_max_thresold, (valeur_min_thresold, valeur_max_thresold), step=1, key=9)
+        # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+        new_valeur_min_thresold = valeurs_thresold[0]
+        new_valeur_max_thresold = valeurs_thresold[1]
+        # Afficher les valeurs sélectionnées
+        st.write(new_valeur_min_thresold)
+        st.write(new_valeur_max_thresold)
+    with col_stop_loss:
+        valeur_min_stop_loss= 32
+        valeur_max_stop_loss = 512
+        # Utiliser le widget slider avec les valeurs minimale et maximale
+        valeurs_stop_loss = st.slider("Stop Loss Value", valeur_min_stop_loss, valeur_max_stop_loss, (valeur_min_stop_loss, valeur_max_stop_loss), step=1, key=10)
+        # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+        new_valeur_min_stop_loss = valeurs_stop_loss[0]
+        new_valeur_max_stop_loss = valeurs_stop_loss[1]
+        # Afficher les valeurs sélectionnées
+        st.write(new_valeur_min_stop_loss)
+        st.write(new_valeur_max_stop_loss)
+    with col_take_profit:
+        valeur_min_take_profit= 32
+        valeur_max_take_profit = 512
+        # Utiliser le widget slider avec les valeurs minimale et maximale
+        valeurs_take_profit = st.slider("Take profit value", valeur_min_take_profit, valeur_max_take_profit, (valeur_min_take_profit, valeur_max_take_profit), step=1, key=11)
+        # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
+        new_valeur_min_take_profit = valeurs_take_profit[0]
+        new_valeur_max_take_profit = valeurs_take_profit[1]
+        # Afficher les valeurs sélectionnées
+        st.write(new_valeur_min_take_profit)
+        st.write(new_valeur_max_take_profit)
+
+
+
+
+    st_param_model = st.button ('Start Magic')
+    if st_param_model :
         st.write("Le bouton a été cliqué !")
-        email_streamlit = email_streamlit_key.text_input("Entrez votre adresse e-mail", key="email_input")
-        if st.button("Valider"):
-            if validate_email(email_streamlit):
-                st.success("Adresse e-mail valide !")
-            else:
-                st.error("Adresse e-mail invalide. Veuillez réessayer.")
+        train, val, test = fetch_data(binance)
+        # Créer deux colonnes pour afficher les ensembles de données
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            with st.expander("Ensemble de formation"):
+                st.dataframe(train.style.set_properties(**{'background-color': 'lightblue', 'color': 'black'}))
+        with col2:
+            with st.expander("Ensemble de validation"):
+                st.dataframe(val.style.set_properties(**{'background-color': 'lightgreen', 'color': 'black'}))
+        with col3:
+            with st.expander("Ensemble de test"):
+                st.dataframe(test.style.set_properties(**{'background-color': 'lightyellow', 'color': 'black'}))
+            
+        X_train, y_train, X_val, y_val, X_test, y_test = load_csv_data()
+        X_train, X_val, X_test = reshape_data(X_train, X_val, X_test)
+        param_space = {
+            'learning_rate': hp.uniform('learning_rate', new_valeur_min_learning_rate, new_valeur_max_learning_rate),
+            'batch_size': hp.uniform('batch_size',new_valeur_min_batch_size, new_valeur_max_batch_size),
+            'epochs': hp.uniform('epochs',new_valeur_min_epochs, new_valeur_max_epochs),
+            'l2': hp.loguniform('l2', -10, 0),
+            'optimizer': hp.choice('optimizer', optimizer),            
+            'units': hp.uniform('units', new_valeur_min_units, new_valeur_max_units),
+            'unit': hp.uniform('unit', new_valeur_min_unit, new_valeur_max_unit),
+            'dropout': hp.uniform('dropout', new_valeur_min_dropout, new_valeur_max_dropout),
+        }
+        trials = Trials()
+        max_evals = 10
+        for i in range(1, max_evals + 1):
+            best = fmin(
+                fn=lambda p: objective(p, X_train, y_train, X_val, y_val),
+                space=param_space,
+                algo=tpe.suggest,
+                max_evals=i,
+                trials=trials,
+                verbose = 1,
+        )
+            progress_bar = st.progress(i / max_evals)
+            st.text(f"Iteration{i}/{max_evals}")
 
+        best['optimizer'] = optimizer[best['optimizer']]
+        st.text("Utilisation du meilleurs model trouvé")
+        print("Best hyperparameters:", best)
+        model = create_model(best)
+        history = model.fit(X_train, y_train, batch_size=int(best['batch_size']), epochs=int(best['epochs']), validation_data=(X_val, y_val))
+        y_pred = model.predict(X_test)
+        corr = np.corrcoef(y_test, y_pred.flatten())[0][1]
+        mse = mean_squared_error(y_test, y_pred)
+        mae = mean_absolute_error(y_test, y_pred)
+        rmse = np.sqrt(mse)
+        r2 = r2_score(y_test, y_pred)
+        errors = np.abs(y_test - y_pred)
 
-    menu_three = st.button ('programm launching')
-    if menu_three :
-        st.success("Le bouton a été cliqué !")
-
-        st.write('''Models Hyperparameters Search''')
-
-        col_slider_1, col_slider_2, col_slider_3, col_slider_4 = st.columns(4)
-        with col_slider_1 :
-            # Définir les valeurs minimale et maximale du slider
-            valeur_min_learning_rate= 0.001
-            valeur_max_learning_rate = 0.01
-            # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_learning_rate = st.slider("Learning rate", valeur_min_learning_rate, valeur_max_learning_rate, (valeur_min_learning_rate, valeur_max_learning_rate), step=0.001, key="2")
-            # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
-            new_valeur_min_learning_rate = valeurs_learning_rate[0]
-            new_valeur_max_learning_rate = valeurs_learning_rate[1]
-            # Afficher les valeurs sélectionnées
-            st.write(new_valeur_min_learning_rate)
-            st.write(new_valeur_max_learning_rate)
-        with col_slider_2 : 
-            valeur_min_batch_size= 32
-            valeur_max_batch_size = 512
-            # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_batch_size = st.slider("Batch size", valeur_min_batch_size, valeur_max_batch_size, (valeur_min_batch_size, valeur_max_batch_size), step=1, key=3)
-            # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
-            new_valeur_min_batch_size = valeurs_batch_size[0]
-            new_valeur_max_batch_size = valeurs_batch_size[1]
-            # Afficher les valeurs sélectionnées
-            st.write(new_valeur_min_batch_size)
-            st.write(new_valeur_max_batch_size)
-        with col_slider_3 :
-            valeur_min_epochs= 10
-            valeur_max_epochs = 100
-            # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_epochs = st.slider("Epochs", valeur_min_epochs, valeur_max_epochs, (valeur_min_epochs, valeur_max_epochs), step=1, key=4)
-            # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
-            new_valeur_min_epochs = valeurs_epochs[0]
-            new_valeur_max_epochs = valeurs_epochs[1]
-            # Afficher les valeurs sélectionnées
-            st.write(new_valeur_min_epochs)
-            st.write(new_valeur_max_epochs)
-        with col_slider_4 :
-            # Définir les valeurs minimale et maximale du slider
-            valeur_min_l2= -10
-            valeur_max_l2 = -4
-            # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_l2 = st.slider("l2", valeur_min_l2, valeur_max_l2, (valeur_min_l2, valeur_max_l2), step=1, key=5)
-            # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
-            new_valeur_min_l2 = valeurs_l2[0]
-            new_valeur_max_l2 = valeurs_l2[1]
-            # Afficher les valeurs sélectionnées
-            st.write(new_valeur_min_l2)
-            st.write(new_valeur_max_l2)
-        col_selectbox_5, col_slider_6, col_slider_7, col_slider_8 = st.columns(4)
-        with col_selectbox_5 :
-            optimizer = st.selectbox(
-                'Optimizer',
-                ('Adam','SGD', 'Adamax', 'Adagrad'))
-            st.write(optimizer)
-            #optimizer = st.selectbox('Optimizer', 'adam', 'SGD')
-            #st.write (optimizer)
-        with col_slider_6 : 
-            # Définir les valeurs minimale et maximale du slider
-            valeur_min_units= 32
-            valeur_max_units = 512
-            # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_units = st.slider("Units", valeur_min_units, valeur_max_units, (valeur_min_units, valeur_max_units), step=1, key=6)
-            # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
-            new_valeur_min_units = valeurs_units[0]
-            new_valeur_max_units = valeurs_units[1]
-            # Afficher les valeurs sélectionnées
-            st.write(new_valeur_min_units)
-            st.write(new_valeur_max_units)
-        with col_slider_7 : 
-            # Définir les valeurs minimale et maximale du slider
-            valeur_min_unit= 32
-            valeur_max_unit = 512
-            # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_unit = st.slider("Unit", valeur_min_unit, valeur_max_unit, (valeur_min_unit, valeur_max_unit), step=1, key=7)
-            # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
-            new_valeur_min_unit = valeurs_unit[0]
-            new_valeur_max_unit = valeurs_unit[1]
-            # Afficher les valeurs sélectionnées
-            st.write(new_valeur_min_unit)
-            st.write(new_valeur_max_unit)
-        with col_slider_8: 
-                # Définir les valeurs minimale et maximale du slider
-            valeur_min_dropout= 0.001
-            valeur_max_dropout = 0.5
-            # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_dropout = st.slider("Dropout", valeur_min_dropout, valeur_max_dropout, (valeur_min_dropout, valeur_max_dropout), step=0.1, key=8 )
-            # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
-            new_valeur_min_dropout = valeurs_dropout[0]
-            new_valeur_max_dropout = valeurs_dropout[1]
-            # Afficher les valeurs sélectionnées
-            st.write(new_valeur_min_dropout)
-            st.write(new_valeur_max_dropout)
-
-
-        col_thresold, col_stop_loss, col_take_profit = st.columns(3)
-        with col_thresold:
-            valeur_min_thresold= 32
-            valeur_max_thresold = 512
-            # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_thresold = st.slider("Thresold value", valeur_min_thresold, valeur_max_thresold, (valeur_min_thresold, valeur_max_thresold), step=1, key=9)
-            # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
-            new_valeur_min_thresold = valeurs_thresold[0]
-            new_valeur_max_thresold = valeurs_thresold[1]
-            # Afficher les valeurs sélectionnées
-            st.write(new_valeur_min_thresold)
-            st.write(new_valeur_max_thresold)
-        with col_stop_loss:
-            valeur_min_stop_loss= 32
-            valeur_max_stop_loss = 512
-            # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_stop_loss = st.slider("Stop Loss Value", valeur_min_stop_loss, valeur_max_stop_loss, (valeur_min_stop_loss, valeur_max_stop_loss), step=1, key=10)
-            # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
-            new_valeur_min_stop_loss = valeurs_stop_loss[0]
-            new_valeur_max_stop_loss = valeurs_stop_loss[1]
-            # Afficher les valeurs sélectionnées
-            st.write(new_valeur_min_stop_loss)
-            st.write(new_valeur_max_stop_loss)
-        with col_take_profit:
-            valeur_min_take_profit= 32
-            valeur_max_take_profit = 512
-            # Utiliser le widget slider avec les valeurs minimale et maximale
-            valeurs_take_profit = st.slider("Take profit value", valeur_min_take_profit, valeur_max_take_profit, (valeur_min_take_profit, valeur_max_take_profit), step=1, key=11)
-            # Obtenir les valeurs sélectionnées à partir du tuple retourné par le slider
-            new_valeur_min_take_profit = valeurs_take_profit[0]
-            new_valeur_max_take_profit = valeurs_take_profit[1]
-            # Afficher les valeurs sélectionnées
-            st.write(new_valeur_min_take_profit)
-            st.write(new_valeur_max_take_profit)
-
-
-
-        st_param_model = st.button ('Start Magic')
-        if st_param_model :
-            st.write("Le bouton a été cliqué !")
-            train, val, test = fetch_data(binance)
-            # Créer deux colonnes pour afficher les ensembles de données
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                with st.expander("Ensemble de formation"):
-                    st.dataframe(train.style.set_properties(**{'background-color': 'lightblue', 'color': 'black'}))
-            with col2:
-                with st.expander("Ensemble de validation"):
-                    st.dataframe(val.style.set_properties(**{'background-color': 'lightgreen', 'color': 'black'}))
-            with col3:
-                with st.expander("Ensemble de test"):
-                    st.dataframe(test.style.set_properties(**{'background-color': 'lightyellow', 'color': 'black'}))
-            X_train, y_train, X_val, y_val, X_test, y_test = load_csv_data()
-            X_train, X_val, X_test = reshape_data(X_train, X_val, X_test)
-            param_space = {
-                'learning_rate': hp.uniform('learning_rate', new_valeur_min_learning_rate, new_valeur_max_learning_rate),
-                'batch_size': hp.uniform('batch_size',new_valeur_min_batch_size, new_valeur_max_batch_size),
-                'epochs': hp.uniform('epochs',new_valeur_min_epochs, new_valeur_max_epochs),
-                'l2': hp.loguniform('l2', -10, 0),
-                'optimizer': hp.choice('optimizer', optimizer),            
-                'units': hp.uniform('units', new_valeur_min_units, new_valeur_max_units),
-                'unit': hp.uniform('unit', new_valeur_min_unit, new_valeur_max_unit),
-                'dropout': hp.uniform('dropout', new_valeur_min_dropout, new_valeur_max_dropout),
-            }
-            trials = Trials()
-            max_evals = 10
-            for i in range(1, max_evals + 1):
-                best = fmin(
-                    fn=lambda p: objective(p, X_train, y_train, X_val, y_val),
-                    space=param_space,
-                    algo=tpe.suggest,
-                    max_evals=i,
-                    trials=trials,
-                    verbose = 1,
-            )
-                progress_bar = st.progress(i / max_evals)
-                st.text(f"Iteration{i}/{max_evals}")
-            best['optimizer'] = optimizer[best['optimizer']]
-            st.text("Utilisation du meilleurs model trouvé")
-            print("Best hyperparameters:", best)
-            model = create_model(best)
-            history = model.fit(X_train, y_train, batch_size=int(best['batch_size']), epochs=int(best['epochs']), validation_data=(X_val, y_val))
-            y_pred = model.predict(X_test)
-            corr = np.corrcoef(y_test, y_pred.flatten())[0][1]
-            mse = mean_squared_error(y_test, y_pred)
-            mae = mean_absolute_error(y_test, y_pred)
-            rmse = np.sqrt(mse)
-            r2 = r2_score(y_test, y_pred)
-            errors = np.abs(y_test - y_pred)
-            trading_param_space = {
-                        'threshold': hp.uniform('threshold', new_valeur_min_thresold, new_valeur_max_thresold),         
-                        'stop_loss': hp.uniform('stop_loss', new_valeur_min_stop_loss, new_valeur_max_stop_loss),      
-                        'take_profit': hp.uniform('take_profit', new_valeur_min_take_profit, new_valeur_max_take_profit)}  
-            symbol='ETHUSDT'
-            trading_trials = Trials()
-            trading_best = fmin(lambda p: trading_objective(p, y_test, y_pred, binance, symbol), trading_param_space, algo=tpe.suggest, max_evals=200, trials=trading_trials, verbose=1)
-            solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
-            subject = "Model performance report"
-            body = "Final balance: {:.2f}".format(solde_final)
-            to_email = email_streamlit
-            from_email = os.environ.get("FROMEMAIL")
-            password = os.environ.get("EMAILPASSWORD") 
-            if send_email(subject, body, mse, corr, best, to_email, from_email, password):
-                print("E-mail sent with success")
-            else:
-                print("E-mail failed to be sent")
-
+        
+        trading_param_space = {
+                    'threshold': hp.uniform('threshold', new_valeur_min_thresold, new_valeur_max_thresold),         
+                    'stop_loss': hp.uniform('stop_loss', new_valeur_min_stop_loss, new_valeur_max_stop_loss),      
+                    'take_profit': hp.uniform('take_profit', new_valeur_min_take_profit, new_valeur_max_take_profit)}  
+        symbol='ETHUSDT'
+        trading_trials = Trials()
+        trading_best = fmin(lambda p: trading_objective(p, y_test, y_pred, binance, symbol), trading_param_space, algo=tpe.suggest, max_evals=200, trials=trading_trials, verbose=1)
+        st.text("Best trading parameters : ", trading_best)
+        solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
+        subject = "Model performance report"
+        body = "Final balance: {:.2f}".format(solde_final)
+        to_email = email_streamlit
+        from_email = os.environ.get("FROMEMAIL")
+        password = os.environ.get("EMAILPASSWORD") 
+        if send_email(subject, body, mse, corr, best, to_email, from_email, password):
+            print("E-mail sent with success")
+        else:
+            print("E-mail failed to be sent")
 
 
 if __name__ == '__main__':
