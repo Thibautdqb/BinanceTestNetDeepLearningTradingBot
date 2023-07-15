@@ -502,10 +502,10 @@ def main():
                 verbose = 1,
         )
             progress_bar = st.progress(i / max_evals)
-            st.text(f"Iteration {i}, Progress: {i}/{max_evals}")
-
+            st.text(f"Iteration{i}/{max_evals}")
 
         best['optimizer'] = optimizer[best['optimizer']]
+        st.text("Utilisation du meilleurs model trouvé")
         print("Best hyperparameters:", best)
         model = create_model(best)
         history = model.fit(X_train, y_train, batch_size=int(best['batch_size']), epochs=int(best['epochs']), validation_data=(X_val, y_val))
@@ -516,24 +516,7 @@ def main():
         rmse = np.sqrt(mse)
         r2 = r2_score(y_test, y_pred)
         errors = np.abs(y_test - y_pred)
-        # Histogramme des erreurs
 
-        # Histogramme de Répartition des erreurs
-        st.subheader("Histogramme de Répartition des erreurs")
-        fig_hist = plt.figure()
-        plt.hist(errors, bins=50)
-        plt.xlabel('Erreur')
-        plt.ylabel("Nombre d'occurrences")
-        plt.title('Histogramme de Répartition des erreurs')
-        st.pyplot(fig_hist)
-        # Graphique des prédictions
-        st.subheader("Graphique des Prédictions")
-        fig_pred = plt.figure()
-        plt.plot(y_test, label='Données de test')
-        plt.plot(y_pred, label='Prédictions')
-        plt.title('Graphique des Prédictions')
-        plt.legend()
-        st.pyplot(fig_pred)
         
         trading_param_space = {
                     'threshold': hp.uniform('threshold', new_valeur_min_thresold, new_valeur_max_thresold),         
@@ -542,7 +525,7 @@ def main():
         symbol='ETHUSDT'
         trading_trials = Trials()
         trading_best = fmin(lambda p: trading_objective(p, y_test, y_pred, binance, symbol), trading_param_space, algo=tpe.suggest, max_evals=200, trials=trading_trials, verbose=1)
-        print("Best trading parameters : ", trading_best)
+        st.text("Best trading parameters : ", trading_best)
         solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
         subject = "Model performance report"
         body = "Final balance: {:.2f}".format(solde_final)
@@ -557,3 +540,22 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+
+        ### Histogramme de Répartition des erreurs
+        ##st.subheader("Histogramme de Répartition des erreurs")
+        ##fig_hist = plt.figure()
+        ##plt.hist(errors, bins=50)
+        ##plt.xlabel('Erreur')
+        ##plt.ylabel("Nombre d'occurrences")
+        ##plt.title('Histogramme de Répartition des erreurs')
+        ##st.pyplot(fig_hist)
+        ### Graphique des prédictions
+        ##st.subheader("Graphique des Prédictions")
+        ##fig_pred = plt.figure()
+        ##plt.plot(y_test, label='Données de test')
+        ##plt.plot(y_pred, label='Prédictions')
+        ##plt.title('Graphique des Prédictions')
+        ##plt.legend()
+        ##st.pyplot(fig_pred)
