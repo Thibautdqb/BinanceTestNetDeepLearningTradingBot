@@ -494,15 +494,15 @@ def main():
         progress_bar = st.progress(0)
         max_evals = 10
         for i in range(1, max_evals + 1):
-            st.write(f"Iteration {i}/{max_evals}")
             best = fmin(
                 fn=lambda p: objective(p, X_train, y_train, X_val, y_val),
                 space=param_space,
                 algo=tpe.suggest,
                 max_evals=i,
                 trials=trials,
+                verbose = True,
         )
-        progress_bar.progress(i / max_evals)
+            progress_bar.progress(i / max_evals)
 
 
         best['optimizer'] = optimizer[best['optimizer']]
