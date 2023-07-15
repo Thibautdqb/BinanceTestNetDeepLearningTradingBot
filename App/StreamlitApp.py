@@ -125,6 +125,7 @@ def objective(params, X_train, y_train, X_val, y_val):
     y_pred = model.predict(X_val).flatten()
     corr = np.corrcoef(y_val, y_pred)[0][1]
     print("MSE: {:.5f} | Correlation: {:.5f}".format(val_loss, corr))
+
     return {'loss': val_loss, 'status': STATUS_OK}
 
 
@@ -490,14 +491,27 @@ def main():
             'learning_rate': hp.uniform('learning_rate', new_valeur_min_learning_rate, new_valeur_max_learning_rate),
             'batch_size': hp.uniform('batch_size',new_valeur_min_batch_size, new_valeur_max_batch_size),
             'epochs': hp.uniform('epochs',new_valeur_min_epochs, new_valeur_max_epochs),
-            'l2': hp.loguniform('l2', -10, -4),
+            'l2': hp.loguniform('l2', -10, 0),
             'optimizer': hp.choice('optimizer', optimizer),            
             'units': hp.uniform('units', new_valeur_min_units, new_valeur_max_units),
             'unit': hp.uniform('unit', new_valeur_min_unit, new_valeur_max_unit),
             'dropout': hp.uniform('dropout', new_valeur_min_dropout, new_valeur_max_dropout),
         }
         trials = Trials()
-        best = fmin(lambda p: objective(p, X_train, y_train, X_val, y_val), param_space, algo=tpe.suggest, max_evals=1, trials=trials)
+        progress_bar = st.progress(0)
+        max_evals = 10
+        for i in range(1, max_evals + 1):
+            st.write(f"Iteration {i}/{max_evals}")
+            best = fmin(
+                fn=lambda p: objective(p, X_train, y_train, X_val, y_val),
+                space=param_space,
+                algo=tpe.suggest,
+                max_evals=i,
+                trials=trials,
+        )
+        progress_bar.progress(i / max_evals)
+
+
         best['optimizer'] = optimizer[best['optimizer']]
         print("Best hyperparameters:", best)
         model = create_model(best)
@@ -518,6 +532,26 @@ def main():
         r2 = r2_score(y_test, y_pred)
         print("R-squared score:", r2)
         errors = np.abs(y_test - y_pred)
+        # Histogramme des erreurs
+
+        
+        # Histogramme de Répartition des erreurs
+        st.subheader("Histogramme de Répartition des erreurs")
+        fig_hist = plt.figure()
+        plt.hist(errors, bins=50)
+        plt.xlabel('Erreur')
+        plt.ylabel("Nombre d'occurrences")
+        plt.title('Histogramme de Répartition des erreurs')
+        st.pyplot(fig_hist)
+        # Graphique des prédictions
+        st.subheader("Graphique des Prédictions")
+        fig_pred = plt.figure()
+        plt.plot(y_test, label='Données de test')
+        plt.plot(y_pred, label='Prédictions')
+        plt.title('Graphique des Prédictions')
+        plt.legend()
+        st.pyplot(fig_pred)
+        
         trading_param_space = {
                     'threshold': hp.uniform('threshold', new_valeur_min_thresold, new_valeur_max_thresold),         
                     'stop_loss': hp.uniform('stop_loss', new_valeur_min_stop_loss, new_valeur_max_stop_loss),      
@@ -536,25 +570,6 @@ def main():
             print("E-mail sent with success")
         else:
             print("E-mail failed to be sent")
-
-        # Histogramme de Répartition des erreurs
-        st.subheader("Histogramme de Répartition des erreurs")
-        fig_hist = plt.figure()
-        plt.hist(errors, bins=50)
-        plt.xlabel('Erreur')
-        plt.ylabel("Nombre d'occurrences")
-        plt.title('Histogramme de Répartition des erreurs')
-        st.pyplot(fig_hist)
-        # Graphique des prédictions
-        st.subheader("Graphique des Prédictions")
-        fig_pred = plt.figure()
-        plt.plot(y_test, label='Données de test')
-        plt.plot(y_pred, label='Prédictions')
-        plt.title('Graphique des Prédictions')
-        plt.legend()
-        st.pyplot(fig_pred)
-        
-
 
         
 
