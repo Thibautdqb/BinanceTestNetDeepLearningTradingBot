@@ -499,18 +499,16 @@ def main():
                 algo=tpe.suggest,
                 max_evals=i,
                 trials=trials,
-                verbose = True,
+                verbose = 1,
         )
         progress_bar = st.progress(i / max_evals)
-        progress_bar
+        st.text(f"Iteration {i}, Progress: {i}/{max_evals}")
+
 
         best['optimizer'] = optimizer[best['optimizer']]
         print("Best hyperparameters:", best)
         model = create_model(best)
         history = model.fit(X_train, y_train, batch_size=int(best['batch_size']), epochs=int(best['epochs']), validation_data=(X_val, y_val))
-        train_loss = history.history['loss']
-        val_loss = history.history['val_loss']
-
         y_pred = model.predict(X_test)
         corr = np.corrcoef(y_test, y_pred.flatten())[0][1]
         mse = mean_squared_error(y_test, y_pred)
