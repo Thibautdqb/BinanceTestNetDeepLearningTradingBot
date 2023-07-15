@@ -543,7 +543,9 @@ def main():
                 print("E-mail failed to be sent")
 
     with col_button_2:
-        st.write('''Define the hyperparameter windows you wish to use to launch the program and click on the "Start the Magic" button''')
+        read_doc = st.button ('Parameters Explaination')
+        if read_doc :
+            st.write('''Define the hyperparameter windows you wish to use to launch the program and click on the "Start the Magic" button''')
 
 
 if __name__ == '__main__':
