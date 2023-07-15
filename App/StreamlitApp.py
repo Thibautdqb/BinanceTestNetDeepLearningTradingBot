@@ -501,8 +501,8 @@ def main():
                 trials=trials,
                 verbose = 1,
         )
-        progress_bar = st.progress(i / max_evals)
-        st.text(f"Iteration {i}, Progress: {i}/{max_evals}")
+            progress_bar = st.progress(i / max_evals)
+            st.text(f"Iteration {i}, Progress: {i}/{max_evals}")
 
 
         best['optimizer'] = optimizer[best['optimizer']]
