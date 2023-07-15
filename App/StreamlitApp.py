@@ -327,12 +327,12 @@ def main():
     
     email_streamlit_key = st.empty()
     
-    menu_one = st.button ('Hyperparameters description', key=menu_one)
+    menu_one = st.button ('Hyperparameters description', key="menu_one")
     if menu_one :
         st.write("Bienvenue")
         
     
-    menu_two = st.button ('Email Sending', key=menu_two)
+    menu_two = st.button ('Email Sending', key="menu_two")
     if menu_two:
         st.write("Le bouton a été cliqué !")
         st.title("Formulaire d'adresse e-mail")
@@ -345,7 +345,7 @@ def main():
                 st.error("Adresse e-mail invalide. Veuillez réessayer.")
 
 
-    menu_three = st.button ('programm launching', key= menu_three )
+    menu_three = st.button ('programm launching', key= "menu_three" )
     if menu_three :
         st.success("Le bouton a été cliqué !")
 
