@@ -43,6 +43,18 @@ from sklearn.metrics import mean_absolute_error, r2_score
 
 
 
+# Définir le thème personnalisé
+# Vous pouvez personnaliser les couleurs en fonction de vos préférences
+custom_theme = {
+    "primaryColor": "#EAF75C",   # Couleur principale (barre latérale et boutons)
+    "backgroundColor": "#1458E0",  # Couleur de fond
+    "secondaryBackgroundColor": "#021154",  # Couleur secondaire (zone de contenu)
+    "textColor": "#FFFFFF",   # Couleur du texte
+}
+
+# Appliquer le thème personnalisé
+st.set_page_config(page_title="Python DP TradingBot", page_icon=":smiley:", layout="wide", initial_sidebar_state="expanded", theme=custom_theme)
+
 
 
 def load_binance_api_keys():
