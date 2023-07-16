@@ -506,7 +506,7 @@ def main():
             model = create_model(best)
             history = model.fit(X_train, y_train, batch_size=int(best['batch_size']), epochs=int(best['epochs']), validation_data=(X_val, y_val))
             y_pred = model.predict(X_test)
-            st.title("Qulaité du meilleur model trouvé : ")
+            st.title("Quality of the best model found :")
 
             corr = np.corrcoef(y_test, y_pred.flatten())[0][1]
             mse = mean_squared_error(y_test, y_pred)
