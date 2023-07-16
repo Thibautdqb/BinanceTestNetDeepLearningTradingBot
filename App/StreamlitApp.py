@@ -222,7 +222,7 @@ def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, 
     trade_data = []
     trade_results = []  
     quantity = 0.1 ### Percentage of the total balance to be exchanged (customise to suit your needs)
-    st.text("debut du trading")
+    st.text("  Starting Trading ")
     trade_count = 0  
     i = 0  
 
@@ -314,10 +314,10 @@ def main():
     col_max_evals_model, col_max_evals_trad = st.columns(2)  
 
     with col_max_evals_model : 
-        valeurs_col_max_evals_model = st.slider('Nombre d iterations dans le processus de recherche du meilleur model de prediction', min_value=5, max_value=50, value=50, step=1)
+        valeurs_col_max_evals_model = st.slider('Number of iterations in the process of finding the best predictive model ', min_value=5, max_value=50, value=50, step=1)
 
     with col_max_evals_trad : 
-        valeurs_col_max_evals_trad = st.slider('Nombre d iterations dans le processus de recherche des meilleurs parametres de trading', min_value=100, max_value=2000, value=50, step=1)
+        valeurs_col_max_evals_trad = st.slider('Number of iterations in the process of finding the best trading parameters', min_value=100, max_value=2000, value=50, step=1)
 
 
     col_slider_1, col_slider_2, col_slider_3, col_slider_4 = st.columns(4)
@@ -458,22 +458,22 @@ def main():
 
     st_param_model = st.button ('Start Magic')
     if st_param_model :
-        st.write("Le bouton a été cliqué !")
+        st.header('Historical data recovery')
         train, val, test = fetch_data(binance)
         # Créer deux colonnes pour afficher les ensembles de données
         col1, col2, col3 = st.columns(3)
         with col1:
-            with st.expander("Ensemble de formation"):
+            with st.expander("Training set"):
                 st.dataframe(train.style.set_properties(**{'background-color': 'lightblue', 'color': 'black'}))
         with col2:
-            with st.expander("Ensemble de validation"):
+            with st.expander("Validation set"):
                 st.dataframe(val.style.set_properties(**{'background-color': 'lightgreen', 'color': 'black'}))
         with col3:
-            with st.expander("Ensemble de test"):
+            with st.expander("Test set"):
                 st.dataframe(test.style.set_properties(**{'background-color': 'lightyellow', 'color': 'black'}))
         X_train, y_train, X_val, y_val, X_test, y_test = load_csv_data()
         X_train, X_val, X_test = reshape_data(X_train, X_val, X_test)
-        st.title("Recherche du meilleur model .......")
+        st.title("Searching for the best model .......")
         param_space = {
             'learning_rate': hp.uniform('learning_rate', new_valeur_min_learning_rate, new_valeur_max_learning_rate),
             'batch_size': hp.uniform('batch_size',new_valeur_min_batch_size, new_valeur_max_batch_size),
@@ -501,7 +501,7 @@ def main():
 
         if optimisation_complete: 
             best['optimizer'] = optimizer[best['optimizer']]
-            st.title("Utilisation du meilleurs model trouvé ")
+            st.title("Use of the best model found")
             print("Best hyperparameters:", best)
             model = create_model(best)
             history = model.fit(X_train, y_train, batch_size=int(best['batch_size']), epochs=int(best['epochs']), validation_data=(X_val, y_val))
@@ -518,22 +518,20 @@ def main():
 
             col_graph_1, col_graph_2 = st.columns(2)
             with col_graph_1: 
-                st.subheader("Histogramme de Répartition des erreurs")
+                st.subheader("Error distribution histogram")
                 fig_hist = plt.figure()
                 plt.hist(errors, bins=50)
-                plt.xlabel('Erreur')
-                plt.ylabel("Nombre d'occurrences")
-                plt.title('Histogramme de Répartition des erreurs')
+                plt.xlabel('Error')
+                plt.ylabel("Number of occurrences")
                 st.pyplot(fig_hist)
 
 
             with col_graph_2 : 
                 # Graphique des prédictions
-                st.subheader("Graphique des Prédictions")
+                st.subheader("Prediction graph")
                 fig_pred = plt.figure()
-                plt.plot(y_test, label='Données de test')
-                plt.plot(y_pred, label='Prédictions')
-                plt.title('Graphique des Prédictions')
+                plt.plot(y_test, label='Test data')
+                plt.plot(y_pred, label='Predictions')
                 plt.legend()
                 st.pyplot(fig_pred)
 
@@ -546,7 +544,7 @@ def main():
                         'take_profit': hp.uniform('take_profit', new_valeur_min_take_profit, new_valeur_max_take_profit)}  
             symbol='ETHUSDT'
             trading_trials = Trials()
-            st.title("Optimisation des parametres de trading")
+            st.title("Optimizing trading parameters")
 
             max_evals = valeurs_col_max_evals_trad
             progress_bar = st.progress(0)  # Créez la barre de chargement en dehors de la boucle for
@@ -564,7 +562,7 @@ def main():
 
             optimisation_trading_complete = True
 
-            st.title("Optilisation des parametres de trading terminé ")
+            st.title("Optimization of trading parameters completed ")
             
 
             if optimisation_trading_complete : 
