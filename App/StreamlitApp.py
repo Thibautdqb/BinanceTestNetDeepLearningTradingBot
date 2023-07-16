@@ -214,6 +214,7 @@ def place_order(binance, symbol, side, quantity):
         return False
 
 def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, binance, symbol):
+    
     signals = generate_signals(y_pred, threshold, stop_loss, take_profit)
     balance = float(binance.get_asset_balance(asset='USDT')['free'])
     position = 0  
@@ -221,7 +222,7 @@ def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, 
     trade_data = []
     trade_results = []  
     quantity = 0.1 ### Percentage of the total balance to be exchanged (customise to suit your needs)
-
+    st.text("debut du trading")
     trade_count = 0  
     i = 0  
 
@@ -555,6 +556,8 @@ def main():
             st.title("Utilisation du meilleurs model 4")
 
             max_evals = 200
+            progress_bar = st.progress(0)  # Créez la barre de chargement en dehors de la boucle for
+            
             for i in range(1, max_evals + 1):
                 trading_best = fmin(
                     fn=lambda p: trading_objective(p, y_test, y_pred, binance, symbol),
@@ -562,10 +565,12 @@ def main():
                     algo=tpe.suggest,
                     max_evals=i,
                     trials=trading_trials,
-                    verbose = 1,
-        )   
-                progress_bar = st.progress(i / max_evals)
+                    verbose=1,
+                )
+                progress_bar.progress(i / max_evals)  # Mettez à jour la barre de chargement à chaque itération
+            
             optimisation_trading_complete = True
+
             st.title("Optilisation des parametres de trading terminé ")
 
 
