@@ -557,7 +557,7 @@ def main():
 
             max_evals = 200
             progress_bar = st.progress(0)  # Créez la barre de chargement en dehors de la boucle for
-            
+
             for i in range(1, max_evals + 1):
                 trading_best = fmin(
                     fn=lambda p: trading_objective(p, y_test, y_pred, binance, symbol),
@@ -568,15 +568,18 @@ def main():
                     verbose=1,
                 )
                 progress_bar.progress(i / max_evals)  # Mettez à jour la barre de chargement à chaque itération
-            
+
             optimisation_trading_complete = True
 
             st.title("Optilisation des parametres de trading terminé ")
 
 
             if optimisation_trading_complete : 
+                st.title("Optilisation des parametres de trading terminé10 ")
+
                 solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
-                
+                st.title("Optilisation des parametres de trading terminé11 ")
+
                 
                 
                 subject = "Model performance report"
