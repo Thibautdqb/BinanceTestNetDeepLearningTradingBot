@@ -289,35 +289,6 @@ def plot_trades(y_test, trade_data):
             plt.scatter(index, price, c="red", label="sell" if index == 0 else None)
     plt.legend()
 
-def send_email(subject, body, mse, corr, best_hyperparams, to_email, from_email, password):
-    body = f"{body}\nMean squared error: {mse}\nCorrelation: {corr}\nBest hyperparameters: {best_hyperparams}"
-    msg = MIMEMultipart()
-    msg['From'] = from_email
-    msg['To'] = to_email
-    msg['Subject'] = subject
-    msg.attach(MIMEText(body, 'plain'))
-
-    try:
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(from_email, password)
-        text = msg.as_string()
-        server.sendmail(from_email, to_email, text)
-        server.quit()
-        return True
-    except Exception as e:
-        print("Error sending the e-mail :", e)
-        return False
-
-
-
-
-def validate_email(email):
-    # Vérifie si l'adresse e-mail est valide
-    # Vous pouvez personnaliser cette fonction en fonction de vos critères de validation
-    if "@" in email:
-        return True
-    return False
 
 
 
@@ -334,28 +305,19 @@ def main():
     st.write('''Define the hyperparameter windows you wish to use to launch the program and click on the "Start the Magic" button''')
     
     api_key, api_secret = load_binance_api_keys()
-    binance = initialize_binance(api_key, api_secret)
-    st.header('Email Formular')
+    binance = initialize_binance(api_key, api_secret)    
+
     
-    email_streamlit_key = st.empty()
-    email_streamlit = email_streamlit_key.text_input("Entrez votre adresse e-mail", key="email_input")
-    if st.button("Valider"):
-        if validate_email(email_streamlit):
-            st.success("Adresse e-mail valide !")
-        else:
-            st.error("Adresse e-mail invalide. Veuillez réessayer.")
+    
+    
     st.header('Models Hyperparameters Search')
-    
-
-
-
     col_max_evals_model, col_max_evals_trad = st.columns(2)  
 
     with col_max_evals_model : 
-        valeurs_col_max_evals_model = st.slider('Slider 1', min_value=5, max_value=50, value=50, step=1)
+        valeurs_col_max_evals_model = st.slider('Nombre d iterations dans le processus de recherche du meilleur model de prediction', min_value=5, max_value=50, value=50, step=1)
 
     with col_max_evals_trad : 
-        valeurs_col_max_evals_trad = st.slider('Slider 1', min_value=100, max_value=2000, value=50, step=1)
+        valeurs_col_max_evals_trad = st.slider('Nombre d iterations dans le processus de recherche des meilleurs parametres de trading', min_value=100, max_value=2000, value=50, step=1)
 
 
     col_slider_1, col_slider_2, col_slider_3, col_slider_4 = st.columns(4)
@@ -608,21 +570,7 @@ def main():
             if optimisation_trading_complete : 
 
                 solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
-
-                
-                
-                subject = "Model performance report"
-                body = "Final balance: {:.2f}".format(solde_final)
-                to_email = email_streamlit
-                from_email = os.environ.get("FROMEMAIL")
-                password = os.environ.get("EMAILPASSWORD") 
-                if send_email(subject, body, mse, corr, best, to_email, from_email, password):
-                    st.success("E-mail sent with success")
-                else:
-                    st.error("E-mail failed to be sent")
+                st.text("Thank You")
 
 if __name__ == '__main__':
     main()
-
-
-
