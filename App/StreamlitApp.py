@@ -554,18 +554,18 @@ def main():
             trading_trials = Trials()
             st.title("Utilisation du meilleurs model 4")
 
-            max_eval = 200
-            for i in range(1, max_eval + 1):
+            max_evals = 200
+            for i in range(1, max_evals + 1):
                 trading_best = fmin(
                     fn=lambda p: trading_objective(p, y_test, y_pred, binance, symbol),
                     space=trading_param_space,
                     algo=tpe.suggest,
-                    max_eval=i,
+                    max_evals=i,
                     trials=trading_trials,
                     verbose = 1,
         )   
-                progress_bar = st.progress(i / max_eval)
-                st.text(f"Iteration{i}/{max_eval}")
+                progress_bar = st.progress(i / max_evals)
+                st.text(f"Iteration{i}/{max_evals}")
             optimisation_trading_complete = True
             st.title("Utilisation du meilleurs model 5")
 
