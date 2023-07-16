@@ -234,7 +234,7 @@ def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, 
             balance -= entry_price
             trade_data.append(("buy", i, entry_price, "buy"))
             if place_order(binance, symbol, Client.SIDE_BUY, quantity):
-                print(f"Buying at price {entry_price}")
+                st.text(f"Buying at price {entry_price}")
             trade_count += 1
 
         elif signal == -1 and position > 0:
@@ -243,7 +243,7 @@ def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, 
             balance += exit_price
             trade_data.append(("sell", i, exit_price, "sell"))
             if place_order(binance, symbol, Client.SIDE_SELL, quantity):
-                print(f"Selling at price {exit_price}")
+                st.text(f"Selling at price {exit_price}")
             trade_count += 1
 
         elif position > 0 and (y_test[i] <= entry_price * (1 - stop_loss) or y_test[i] >= entry_price * (1 + take_profit)):
@@ -255,7 +255,7 @@ def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, 
             trade_data.append(("sell", i, exit_price, result_string))
             trade_results.append((entry_price, exit_price, trade_result))
             if place_order(binance, symbol, Client.SIDE_SELL, quantity):
-                print(f"Selling at price {exit_price} ({result_string})")
+                st.text(f"Selling at price {exit_price} ({result_string})")
             trade_count += 1
 
         i += 1
@@ -268,9 +268,9 @@ def execute_trading_strategy(y_test, y_pred, threshold, stop_loss, take_profit, 
 
 
     for i, result in enumerate(trade_results):
-        print(f"Trade {i+1}: Entry at {result[0]}, Exit at {result[1]}, Result of {result[2]:.2%}")
+        st.text(f"Trade {i+1}: Entry at {result[0]}, Exit at {result[1]}, Result of {result[2]:.2%}")
 
-    print(f"Final balance: {balance}")
+    st.text(f"Final balance: {balance}")
     return balance
 
 
@@ -565,13 +565,15 @@ def main():
                     verbose = 1,
         )   
                 progress_bar = st.progress(i / max_evals)
-                st.text(f"Iteration{i}/{max_evals}")
             optimisation_trading_complete = True
-            st.title("Utilisation du meilleurs model 5")
+            st.title("Optilisation des parametres de trading terminé ")
 
 
             if optimisation_trading_complete : 
                 solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
+                
+                
+                
                 subject = "Model performance report"
                 body = "Final balance: {:.2f}".format(solde_final)
                 to_email = email_streamlit
