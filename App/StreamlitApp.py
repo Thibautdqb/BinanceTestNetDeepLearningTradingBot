@@ -345,10 +345,7 @@ def main():
     st.write('''Models Hyperparameters Search''')
     
     col_slider_1, col_slider_2, col_slider_3, col_slider_4 = st.columns(4)
-    col_slider_1 = st.empty()
-    col_slider_2 = st.empty()
-    col_slider_3 = st.empty()
-    col_slider_4 = st.empty()
+
 
 
 
