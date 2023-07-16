@@ -548,19 +548,32 @@ def main():
                         'take_profit': hp.uniform('take_profit', new_valeur_min_take_profit, new_valeur_max_take_profit)}  
             symbol='ETHUSDT'
             trading_trials = Trials()
-            trading_best = fmin(lambda p: trading_objective(p, y_test, y_pred, binance, symbol), trading_param_space, algo=tpe.suggest, max_evals=200, trials=trading_trials, verbose=1)
-            solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
-            subject = "Model performance report"
-            body = "Final balance: {:.2f}".format(solde_final)
-            to_email = email_streamlit
-            from_email = os.environ.get("FROMEMAIL")
-            password = os.environ.get("EMAILPASSWORD") 
-            if send_email(subject, body, mse, corr, best, to_email, from_email, password):
-                print("E-mail sent with success")
-            else:
-                print("E-mail failed to be sent")
 
+            max_eval = 200
+            for i in range(1, max_eval + 1):
+                trading_best = fmin(
+                    fn=lambda p: trading_objective(p, y_test, y_pred, binance, symbol),
+                    space=trading_param_space,
+                    algo=tpe.suggest,
+                    max_eval=i,
+                    trials=trading_trials,
+                    verbose = 1,
+        )   
+                progress_bar = st.progress(i / max_eval)
+                st.text(f"Iteration{i}/{max_eval}")
 
+            optimisation_trading_complete = True
+            if optimisation_trading_complete : 
+                solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
+                subject = "Model performance report"
+                body = "Final balance: {:.2f}".format(solde_final)
+                to_email = email_streamlit
+                from_email = os.environ.get("FROMEMAIL")
+                password = os.environ.get("EMAILPASSWORD") 
+                if send_email(subject, body, mse, corr, best, to_email, from_email, password):
+                    st.success("E-mail sent with success")
+                else:
+                    st.error("E-mail failed to be sent")
 
 if __name__ == '__main__':
     main()
