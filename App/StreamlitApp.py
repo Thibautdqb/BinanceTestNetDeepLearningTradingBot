@@ -391,7 +391,7 @@ def main():
         st.write(new_valeur_min_epochs)
         st.write(new_valeur_max_epochs)
         st.write(" "*10)
-
+ 
     with col_slider_4 :
         # Définir les valeurs minimale et maximale du slider
         valeur_min_l2= -10
@@ -547,7 +547,7 @@ def main():
             errors = np.abs(y_test - y_pred)
         
 
-            col_graph_1, col_graph_2 = st.columns(3)
+            col_graph_1, col_graph_2 = st.columns(2)
             with col_graph_1: 
                 st.subheader("Histogramme de Répartition des erreurs")
                 fig_hist = plt.figure()
@@ -558,7 +558,7 @@ def main():
                 st.pyplot(fig_hist)
 
 
-            with col_graph_1 : 
+            with col_graph_2 : 
                 # Graphique des prédictions
                 st.subheader("Graphique des Prédictions")
                 fig_pred = plt.figure()
