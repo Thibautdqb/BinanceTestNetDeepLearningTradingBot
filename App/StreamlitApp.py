@@ -531,23 +531,28 @@ def main():
 
         if optimisation_complete: 
             best['optimizer'] = optimizer[best['optimizer']]
-            st.title("Utilisation du meilleurs model trouvé")
+            st.title("Utilisation du meilleurs model trouvé1")
             print("Best hyperparameters:", best)
             model = create_model(best)
             history = model.fit(X_train, y_train, batch_size=int(best['batch_size']), epochs=int(best['epochs']), validation_data=(X_val, y_val))
             y_pred = model.predict(X_test)
+            st.title("Utilisation du meilleurs model 2")
+
             corr = np.corrcoef(y_test, y_pred.flatten())[0][1]
             mse = mean_squared_error(y_test, y_pred)
             mae = mean_absolute_error(y_test, y_pred)
             rmse = np.sqrt(mse)
             r2 = r2_score(y_test, y_pred)
             errors = np.abs(y_test - y_pred)
+            st.title("Utilisation du meilleurs model 3")
+
             trading_param_space = {
                         'threshold': hp.uniform('threshold', new_valeur_min_thresold, new_valeur_max_thresold),         
                         'stop_loss': hp.uniform('stop_loss', new_valeur_min_stop_loss, new_valeur_max_stop_loss),      
                         'take_profit': hp.uniform('take_profit', new_valeur_min_take_profit, new_valeur_max_take_profit)}  
             symbol='ETHUSDT'
             trading_trials = Trials()
+            st.title("Utilisation du meilleurs model 4")
 
             max_eval = 200
             for i in range(1, max_eval + 1):
@@ -561,8 +566,10 @@ def main():
         )   
                 progress_bar = st.progress(i / max_eval)
                 st.text(f"Iteration{i}/{max_eval}")
-
             optimisation_trading_complete = True
+            st.title("Utilisation du meilleurs model 5")
+
+
             if optimisation_trading_complete : 
                 solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
                 subject = "Model performance report"
