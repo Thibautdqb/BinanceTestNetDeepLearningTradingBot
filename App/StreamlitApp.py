@@ -319,44 +319,6 @@ def validate_email(email):
     return False
 
 
-import asyncio
-import streamlit as st
-import streamlit.components.v1 as stc
-from hyperopt import fmin, tpe, hp, Trials
-import numpy as np
-
-
-# Créez une fonction asynchrone pour le code qui suit la boucle for
-async def run_after_optimization(best, optimizer, X_train, y_train, X_test, y_test, X_val, y_val, new_valeur_min_thresold, new_valeur_max_thresold,new_valeur_min_stop_loss,new_valeur_max_stop_loss, new_valeur_max_take_profit , new_valeur_min_take_profit, binance, email_streamlit):
-    best['optimizer'] = optimizer[best['optimizer']]
-    st.title("Utilisation du meilleurs model trouvé")
-    print("Best hyperparameters:", best)
-    model = create_model(best)
-    history = model.fit(X_train, y_train, batch_size=int(best['batch_size']), epochs=int(best['epochs']), validation_data=(X_val, y_val))
-    y_pred = model.predict(X_test)
-    corr = np.corrcoef(y_test, y_pred.flatten())[0][1]
-    mse = mean_squared_error(y_test, y_pred)
-    mae = mean_absolute_error(y_test, y_pred)
-    rmse = np.sqrt(mse)
-    r2 = r2_score(y_test, y_pred)
-    errors = np.abs(y_test - y_pred)
-    trading_param_space = {
-                'threshold': hp.uniform('threshold', new_valeur_min_thresold, new_valeur_max_thresold),         
-                'stop_loss': hp.uniform('stop_loss', new_valeur_min_stop_loss, new_valeur_max_stop_loss),      
-                'take_profit': hp.uniform('take_profit', new_valeur_min_take_profit, new_valeur_max_take_profit)}  
-    symbol='ETHUSDT'
-    trading_trials = Trials()
-    trading_best = fmin(lambda p: trading_objective(p, y_test, y_pred, binance, symbol), trading_param_space, algo=tpe.suggest, max_evals=200, trials=trading_trials, verbose=1)
-    solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
-    subject = "Model performance report"
-    body = "Final balance: {:.2f}".format(solde_final)
-    to_email = email_streamlit
-    from_email = os.environ.get("FROMEMAIL")
-    password = os.environ.get("EMAILPASSWORD") 
-    if send_email(subject, body, mse, corr, best, to_email, from_email, password):
-        print("E-mail sent with success")
-    else:
-        print("E-mail failed to be sent")
 
 
 
@@ -553,7 +515,7 @@ def main():
             'dropout': hp.uniform('dropout', new_valeur_min_dropout, new_valeur_max_dropout),
         }
         trials = Trials()
-        max_evals = 10
+        max_evals = 5
         for i in range(1, max_evals + 1):
             best = fmin(
                 fn=lambda p: objective(p, X_train, y_train, X_val, y_val),
@@ -565,11 +527,38 @@ def main():
         )
             progress_bar = st.progress(i / max_evals)
             st.text(f"Iteration{i}/{max_evals}")
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        loop.run_until_complete(run_after_optimization())
+        optimisation_complete = True
 
-        
+        if optimisation_complete: 
+            best['optimizer'] = optimizer[best['optimizer']]
+            st.title("Utilisation du meilleurs model trouvé")
+            print("Best hyperparameters:", best)
+            model = create_model(best)
+            history = model.fit(X_train, y_train, batch_size=int(best['batch_size']), epochs=int(best['epochs']), validation_data=(X_val, y_val))
+            y_pred = model.predict(X_test)
+            corr = np.corrcoef(y_test, y_pred.flatten())[0][1]
+            mse = mean_squared_error(y_test, y_pred)
+            mae = mean_absolute_error(y_test, y_pred)
+            rmse = np.sqrt(mse)
+            r2 = r2_score(y_test, y_pred)
+            errors = np.abs(y_test - y_pred)
+            trading_param_space = {
+                        'threshold': hp.uniform('threshold', new_valeur_min_thresold, new_valeur_max_thresold),         
+                        'stop_loss': hp.uniform('stop_loss', new_valeur_min_stop_loss, new_valeur_max_stop_loss),      
+                        'take_profit': hp.uniform('take_profit', new_valeur_min_take_profit, new_valeur_max_take_profit)}  
+            symbol='ETHUSDT'
+            trading_trials = Trials()
+            trading_best = fmin(lambda p: trading_objective(p, y_test, y_pred, binance, symbol), trading_param_space, algo=tpe.suggest, max_evals=200, trials=trading_trials, verbose=1)
+            solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
+            subject = "Model performance report"
+            body = "Final balance: {:.2f}".format(solde_final)
+            to_email = email_streamlit
+            from_email = os.environ.get("FROMEMAIL")
+            password = os.environ.get("EMAILPASSWORD") 
+            if send_email(subject, body, mse, corr, best, to_email, from_email, password):
+                print("E-mail sent with success")
+            else:
+                print("E-mail failed to be sent")
 
 
 
