@@ -545,8 +545,21 @@ def main():
             rmse = np.sqrt(mse)
             r2 = r2_score(y_test, y_pred)
             errors = np.abs(y_test - y_pred)
-            st.title("Utilisation du meilleurs model 3")
-
+            st.subheader("Histogramme de Répartition des erreurs")
+            fig_hist = plt.figure()
+            plt.hist(errors, bins=50)
+            plt.xlabel('Erreur')
+            plt.ylabel("Nombre d'occurrences")
+            plt.title('Histogramme de Répartition des erreurs')
+            st.pyplot(fig_hist)
+            # Graphique des prédictions
+            st.subheader("Graphique des Prédictions")
+            fig_pred = plt.figure()
+            plt.plot(y_test, label='Données de test')
+            plt.plot(y_pred, label='Prédictions')
+            plt.title('Graphique des Prédictions')
+            plt.legend()
+            st.pyplot(fig_pred)
             trading_param_space = {
                         'threshold': hp.uniform('threshold', new_valeur_min_thresold, new_valeur_max_thresold),         
                         'stop_loss': hp.uniform('stop_loss', new_valeur_min_stop_loss, new_valeur_max_stop_loss),      
@@ -572,7 +585,7 @@ def main():
             optimisation_trading_complete = True
 
             st.title("Optilisation des parametres de trading terminé ")
-
+            
 
             if optimisation_trading_complete : 
                 st.title("Optilisation des parametres de trading terminé10 ")
@@ -597,19 +610,3 @@ if __name__ == '__main__':
 
 
 
-        ### Histogramme de Répartition des erreurs
-        ##st.subheader("Histogramme de Répartition des erreurs")
-        ##fig_hist = plt.figure()
-        ##plt.hist(errors, bins=50)
-        ##plt.xlabel('Erreur')
-        ##plt.ylabel("Nombre d'occurrences")
-        ##plt.title('Histogramme de Répartition des erreurs')
-        ##st.pyplot(fig_hist)
-        ### Graphique des prédictions
-        ##st.subheader("Graphique des Prédictions")
-        ##fig_pred = plt.figure()
-        ##plt.plot(y_test, label='Données de test')
-        ##plt.plot(y_pred, label='Prédictions')
-        ##plt.title('Graphique des Prédictions')
-        ##plt.legend()
-        ##st.pyplot(fig_pred)
