@@ -50,7 +50,7 @@ from sklearn.metrics import mean_absolute_error, r2_score
 # Appliquer les options de personnalisation
 st.set_page_config(
     page_title="Python DP TradingBot",
-    page_icon=":chart:",
+    page_icon=":bar chart:",
     layout="wide",
     initial_sidebar_state="expanded",
 )
