@@ -452,7 +452,7 @@ def main():
     st.header('Trading Parameters')
     col_thresold, col_stop_loss, col_take_profit = st.columns(3)
     with col_thresold:
-        valeur_min_thresold= 0
+        valeur_min_thresold= 0.00001
         valeur_max_thresold = 0.05
         # Utiliser le widget slider avec les valeurs minimale et maximale
         valeurs_thresold = st.slider("Thresold value", valeur_min_thresold, valeur_max_thresold, (valeur_min_thresold, valeur_max_thresold), step=0.01, key=9)
@@ -463,7 +463,7 @@ def main():
         st.write(new_valeur_min_thresold)
         st.write(new_valeur_max_thresold)
     with col_stop_loss:
-        valeur_min_stop_loss= 0
+        valeur_min_stop_loss= 0.00001
         valeur_max_stop_loss = 0.01
         # Utiliser le widget slider avec les valeurs minimale et maximale
         valeurs_stop_loss = st.slider("Stop Loss Value", valeur_min_stop_loss, valeur_max_stop_loss, (valeur_min_stop_loss, valeur_max_stop_loss), step=0.005, key=10)
@@ -474,7 +474,7 @@ def main():
         st.write(new_valeur_min_stop_loss)
         st.write(new_valeur_max_stop_loss)
     with col_take_profit:
-        valeur_min_take_profit= 0
+        valeur_min_take_profit= 0.00001
         valeur_max_take_profit = 0.01
         # Utiliser le widget slider avec les valeurs minimale et maximale
         valeurs_take_profit = st.slider("Take profit value", valeur_min_take_profit, valeur_max_take_profit, (valeur_min_take_profit, valeur_max_take_profit), step=0.005, key=11)
