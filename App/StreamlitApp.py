@@ -346,12 +346,19 @@ def main():
             st.error("Adresse e-mail invalide. Veuillez réessayer.")
     st.header('Models Hyperparameters Search')
     
+
+
+
+    col_max_evals_model, col_max_evals_trad = st.columns(2)  
+
+    with col_max_evals_model : 
+        valeurs_col_max_evals_model = st.slider('Slider 1', min_value=5, max_value=50, value=50, step=1)
+
+    with col_max_evals_trad : 
+        valeurs_col_max_evals_trad = st.slider('Slider 1', min_value=100, max_value=2000, value=50, step=1)
+
+
     col_slider_1, col_slider_2, col_slider_3, col_slider_4 = st.columns(4)
-
-
-
-
-
     with col_slider_1 :
         # Définir les valeurs minimale et maximale du slider
         valeur_min_learning_rate= 0.001
@@ -516,7 +523,7 @@ def main():
             'dropout': hp.uniform('dropout', new_valeur_min_dropout, new_valeur_max_dropout),
         }
         trials = Trials()
-        max_evals = 5
+        max_evals = valeurs_col_max_evals_model
         for i in range(1, max_evals + 1):
             best = fmin(
                 fn=lambda p: objective(p, X_train, y_train, X_val, y_val),
@@ -532,12 +539,12 @@ def main():
 
         if optimisation_complete: 
             best['optimizer'] = optimizer[best['optimizer']]
-            st.title("Utilisation du meilleurs model trouvé1")
+            st.title("Utilisation du meilleurs model trouvé ")
             print("Best hyperparameters:", best)
             model = create_model(best)
             history = model.fit(X_train, y_train, batch_size=int(best['batch_size']), epochs=int(best['epochs']), validation_data=(X_val, y_val))
             y_pred = model.predict(X_test)
-            st.title("Utilisation du meilleurs model 2")
+            st.title("Qulaité du meilleur model trouvé : ")
 
             corr = np.corrcoef(y_test, y_pred.flatten())[0][1]
             mse = mean_squared_error(y_test, y_pred)
@@ -577,9 +584,9 @@ def main():
                         'take_profit': hp.uniform('take_profit', new_valeur_min_take_profit, new_valeur_max_take_profit)}  
             symbol='ETHUSDT'
             trading_trials = Trials()
-            st.title("Utilisation du meilleurs model 4")
+            st.title("Optimisation des parametres de trading")
 
-            max_evals = 200
+            max_evals = valeurs_col_max_evals_trad
             progress_bar = st.progress(0)  # Créez la barre de chargement en dehors de la boucle for
 
             for i in range(1, max_evals + 1):
@@ -599,10 +606,8 @@ def main():
             
 
             if optimisation_trading_complete : 
-                st.title("Optilisation des parametres de trading terminé10 ")
 
                 solde_final = execute_trading_strategy(y_test, y_pred.flatten(), trading_best['threshold'], trading_best['stop_loss'], trading_best['take_profit'], binance, "ETHUSDT")
-                st.title("Optilisation des parametres de trading terminé11 ")
 
                 
                 
