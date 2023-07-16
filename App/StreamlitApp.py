@@ -345,7 +345,6 @@ def main():
     st.write('''Models Hyperparameters Search''')
     
     col_slider_1, col_slider_2, col_slider_3, col_slider_4 = st.columns(4)
-    st.markdown("<p style='margin-right: 50px;'> </p>", unsafe_allow_html=True)
 
     with col_slider_1 :
         # Définir les valeurs minimale et maximale du slider
@@ -359,7 +358,7 @@ def main():
         # Afficher les valeurs sélectionnées
         st.write(new_valeur_min_learning_rate)
         st.write(new_valeur_max_learning_rate)
-    st.markdown("<p style='margin-right: 50px;'> </p>", unsafe_allow_html=True)
+        st.markdown("<p style='margin-right: 50px;'> </p>", unsafe_allow_html=True)
     with col_slider_2 : 
         valeur_min_batch_size= 32
         valeur_max_batch_size = 512
