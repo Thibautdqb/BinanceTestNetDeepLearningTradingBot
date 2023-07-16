@@ -374,7 +374,7 @@ def main():
     
     api_key, api_secret = load_binance_api_keys()
     binance = initialize_binance(api_key, api_secret)
-    st.title("Formulaire d'adresse e-mail")
+    st.header('Email Formular')
     
     email_streamlit_key = st.empty()
     email_streamlit = email_streamlit_key.text_input("Entrez votre adresse e-mail", key="email_input")
@@ -383,7 +383,7 @@ def main():
             st.success("Adresse e-mail valide !")
         else:
             st.error("Adresse e-mail invalide. Veuillez réessayer.")
-    st.write('''Models Hyperparameters Search''')
+    st.header('Models Hyperparameters Search')
     
     col_slider_1, col_slider_2, col_slider_3, col_slider_4 = st.columns(4)
 
@@ -488,7 +488,7 @@ def main():
         st.write(new_valeur_min_dropout)
         st.write(new_valeur_max_dropout)
     
-
+    st.header('Trading Parameters')
     col_thresold, col_stop_loss, col_take_profit = st.columns(3)
     with col_thresold:
         valeur_min_thresold= 32
@@ -543,7 +543,7 @@ def main():
                 st.dataframe(test.style.set_properties(**{'background-color': 'lightyellow', 'color': 'black'}))
         X_train, y_train, X_val, y_val, X_test, y_test = load_csv_data()
         X_train, X_val, X_test = reshape_data(X_train, X_val, X_test)
-        st.title("Recherche du meilleur model  !")
+        st.title("Recherche du meilleur model .......")
         param_space = {
             'learning_rate': hp.uniform('learning_rate', new_valeur_min_learning_rate, new_valeur_max_learning_rate),
             'batch_size': hp.uniform('batch_size',new_valeur_min_batch_size, new_valeur_max_batch_size),
