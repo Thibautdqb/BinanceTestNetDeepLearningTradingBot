@@ -314,7 +314,7 @@ def main():
     col_max_evals_model, col_max_evals_trad = st.columns(2)  
 
     with col_max_evals_model : 
-        valeurs_col_max_evals_model = st.slider('Number of iterations in the process of finding the best predictive model ', min_value=5, max_value=50, value=50, step=1)
+        valeurs_col_max_evals_model = st.slider('Number of iterations in the process of finding the best predictive model ', min_value=3, max_value=10, value=1, step=1)
 
     with col_max_evals_trad : 
         valeurs_col_max_evals_trad = st.slider('Number of iterations in the process of finding the best trading parameters', min_value=100, max_value=2000, value=50, step=1)
