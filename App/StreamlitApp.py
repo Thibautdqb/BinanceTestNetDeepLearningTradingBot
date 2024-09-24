@@ -1,45 +1,50 @@
-####streamlit one page
+# Streamlit
 import streamlit as st
-import ccxt
+
+# Data manipulation and preprocessing
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split, KFold
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
+# Time and date utilities
 import time
 import datetime
-import sys  
-import csv
-import pandas as pd
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.model_selection import train_test_split
-from keras.layers import Input, LSTM, Dense
-from keras.models import Model
-from keras.layers import Dropout
-import matplotlib.pyplot as plt
-import numpy as np
-from keras.models import Sequential
-from keras.layers import Dense
-from sklearn.metrics import mean_squared_error
-from sklearn.model_selection import KFold
-from hyperopt import fmin, tpe, hp
-from hyperopt import STATUS_OK
-from dotenv import load_dotenv
+
+# System utilities
 import os
-from hyperopt import Trials
+import sys
+import csv
+
+# Deep Learning (via TensorFlow Keras)
+from tensorflow.keras.layers import Input, LSTM, Dense, Dropout
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.regularizers import l2
+from tensorflow.keras.optimizers import Adam
+
+# Binance API (ccxt and Binance client)
+import ccxt
+from binance.client import Client
+from binance.exceptions import BinanceAPIException, BinanceOrderException
+
+# Hyperparameter optimization
+from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
+
+# Environment variable management
+from dotenv import load_dotenv, find_dotenv
+
+# Email sending utilities
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from keras.regularizers import l2
+
+# Visualization
+import matplotlib.pyplot as plt
+
+# itertools
 from itertools import product
-from binance.client import Client
-from binance.exceptions import BinanceAPIException, BinanceOrderException
-from keras.models import Sequential
-from keras.layers import LSTM, Dense
-from keras.regularizers import l2
-from keras.optimizers import Adam
-from dotenv import load_dotenv, find_dotenv
-import numpy as np
-from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.model_selection import train_test_split
-import pandas as pd
-from sklearn.metrics import mean_absolute_error, r2_score
+
 
 
 
